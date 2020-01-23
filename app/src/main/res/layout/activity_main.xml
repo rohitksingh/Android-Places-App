@@ -6,25 +6,49 @@
     android:gravity="center"
     >
     <TextView
-        android:id="@+id/name1"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
     <TextView
-        android:id="@+id/name2"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
     <TextView
-        android:id="@+id/name3"
+        android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
     <TextView
-        android:id="@+id/name4"
+        android:id="@+id/addressTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App Name"
+        />
+    <TextView
+        android:id="@+id/addressStreet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App Name"
+        />
+    <TextView
+        android:id="@+id/elevation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App Name"
+        />
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="App Name"
+        />
+    <TextView
+        android:id="@+id/longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
