@@ -78,7 +78,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         {
 
             case R.id.add:
-                Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
+                openAddPlaceActivity();
                 return true;
 
             default:
@@ -86,6 +86,11 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
         }
 
+    }
+
+    private void openAddPlaceActivity(){
+        Intent intent = new Intent(this, AddPlaceActivity.class);
+        startActivity(intent);
     }
 
 }

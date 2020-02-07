@@ -145,5 +145,4 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     }
 
-
 }
