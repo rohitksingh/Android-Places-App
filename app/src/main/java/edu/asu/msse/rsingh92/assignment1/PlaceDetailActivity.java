@@ -20,27 +20,26 @@ package edu.asu.msse.rsingh92.assignment1;
         * @version January 2016
         */
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
-import android.widget.TextView;
+import android.widget.EditText;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class PlaceDetailActivity extends AppCompatActivity {
 
 
-    private TextView name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
+    private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
+    private PlaceDescription place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);
         category = findViewById(R.id.category);
@@ -50,33 +49,22 @@ public class MainActivity extends AppCompatActivity {
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
 
-        String jsonString = getJsonString();
-        PlaceDescription placeDescription = new PlaceDescription(jsonString);
+        place = getPlace();
 
-        name.setText(placeDescription.getName());
-        description.setText(placeDescription.getDescription());
-        category.setText(placeDescription.getCategory());
-        addressTitle.setText(placeDescription.getAddressTitle());
-        addressStreet.setText(placeDescription.getAddressStreet());
-        elevation.setText(placeDescription.getElevation());
-        latitude.setText(placeDescription.getLatitude());
-        longitude.setText(placeDescription.getLongitude());
+        name.setText(place.getName());
+        description.setText(place.getDescription());
+        category.setText(place.getCategory());
+        addressTitle.setText(place.getAddressTitle());
+        addressStreet.setText(place.getAddressStreet());
+        elevation.setText(place.getElevation());
+        latitude.setText(place.getLatitude());
+        longitude.setText(place.getLongitude());
+
     }
 
-    private String getJsonString(){
-        String json = null;
-        try {
-            InputStream is = this.getAssets().open("location.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
+    private PlaceDescription getPlace(){
+        PlaceDescription place = (PlaceDescription)getIntent().getSerializableExtra("Place");
+        return place;
     }
 
 }

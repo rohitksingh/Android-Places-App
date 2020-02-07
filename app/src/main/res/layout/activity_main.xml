@@ -5,49 +5,49 @@
     android:orientation="vertical"
     android:gravity="center"
     >
-    <TextView
+    <EditText
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
-    <TextView
+    <EditText
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
-    <TextView
+    <EditText
         android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
-    <TextView
+    <EditText
         android:id="@+id/addressTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
-    <TextView
+    <EditText
         android:id="@+id/addressStreet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
-    <TextView
+    <EditText
         android:id="@+id/elevation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
-    <TextView
+    <EditText
         android:id="@+id/latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="App Name"
         />
-    <TextView
+    <EditText
         android:id="@+id/longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

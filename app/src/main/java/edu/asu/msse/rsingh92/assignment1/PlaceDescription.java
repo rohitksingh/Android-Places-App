@@ -3,6 +3,8 @@ package edu.asu.msse.rsingh92.assignment1;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /*
  * Copyright 2020 Rohit Kumar Singh,
  *
@@ -23,29 +25,9 @@ import org.json.JSONObject;
  * @version January 2016
  */
 
-public class PlaceDescription {
+public class PlaceDescription implements Serializable {
 
     private String name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
-
-    public PlaceDescription(String jsonString){
-
-        try {
-
-            JSONObject obj = new JSONObject(jsonString);
-            this.name = obj.getString("name");
-            this.description = obj.getString("description");
-            this.category = obj.getString("category");
-            this.addressTitle = obj.getString("address-title");
-            this.addressStreet = obj.getString("address-street");
-            this.elevation = obj.getString("elevation");
-            this.latitude = obj.getString("latitude");
-            this.longitude = obj.getString("longitude");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public String getName() {
         return name;
