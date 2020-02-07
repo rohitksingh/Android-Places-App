@@ -38,7 +38,7 @@ import java.util.List;
  * @version January 2016
  */
 
-public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , DialogCallBack{
 
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
@@ -145,4 +145,15 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    private void opendialog() {
+
+        ConfirmationDialog exampleDialog=new ConfirmationDialog(this);
+        exampleDialog.show(getSupportFragmentManager(),"example dialog");
+
+    }
+
+    @Override
+    public void dialogResult(boolean result) {
+
+    }
 }

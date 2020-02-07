@@ -1,5 +1,6 @@
 package edu.asu.msse.rsingh92.assignment1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AddPlaceActivity extends AppCompatActivity {
+public class AddPlaceActivity extends AppCompatActivity implements DialogCallBack{
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
 
@@ -29,7 +30,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.place_detail_menu,menu);
+        getMenuInflater().inflate(R.menu.add_place_menu,menu);
         return true;
 
     }
@@ -43,12 +44,27 @@ public class AddPlaceActivity extends AppCompatActivity {
 
             case R.id.save:
                 Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
+                opendialog();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
 
         }
+
+    }
+
+
+    private void opendialog() {
+
+        ConfirmationDialog exampleDialog=new ConfirmationDialog(this);
+        exampleDialog.show(getSupportFragmentManager(),"example dialog");
+
+    }
+
+
+    @Override
+    public void dialogResult(boolean result) {
 
     }
 }

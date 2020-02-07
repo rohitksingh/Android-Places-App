@@ -55,7 +55,6 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     @Override
     public void itemClicked(int index) {
 
-
         Intent intent = new Intent(this, PlaceDetailActivity.class);
         intent.putExtra("Place", allPlaces.get(index));
         intent.putExtra("OTHER_PLACES", (ArrayList<PlaceDescription>)allPlaces);
@@ -88,9 +87,11 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
     }
 
+
     private void openAddPlaceActivity(){
         Intent intent = new Intent(this, AddPlaceActivity.class);
         startActivity(intent);
     }
+
 
 }
