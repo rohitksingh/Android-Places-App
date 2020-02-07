@@ -20,14 +20,14 @@ package edu.asu.msse.rsingh92.assignment1;
         * @version January 2016
         */
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
-
-import java.util.List;
+import android.widget.Toast;
 
 public class PlaceDetailActivity extends AppCompatActivity {
 
@@ -39,7 +39,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_place_detail);
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);
         category = findViewById(R.id.category);
@@ -66,5 +66,36 @@ public class PlaceDetailActivity extends AppCompatActivity {
         PlaceDescription place = (PlaceDescription)getIntent().getSerializableExtra("Place");
         return place;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.place_detail_menu,menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        switch (item.getItemId())
+        {
+
+            case R.id.modify:
+                Toast.makeText(this, "Modify", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.remove:
+                Toast.makeText(this, "remove", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+    }
+
 
 }

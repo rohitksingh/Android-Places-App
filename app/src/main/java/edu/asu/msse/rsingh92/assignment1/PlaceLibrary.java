@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppUtility {
+public class PlaceLibrary {
 
     public static List<PlaceDescription> getAllPlacesFronJson(Context context){
 

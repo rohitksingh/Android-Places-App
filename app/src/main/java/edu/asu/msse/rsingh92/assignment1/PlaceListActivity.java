@@ -2,7 +2,6 @@ package edu.asu.msse.rsingh92.assignment1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,7 +22,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         setContentView(R.layout.activity_placelibrary);
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
-        adapter = new PlaceAdapter(this, AppUtility.getAllPlacesFronJson(this));
+        adapter = new PlaceAdapter(this, PlaceLibrary.getAllPlacesFronJson(this));
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
     }
