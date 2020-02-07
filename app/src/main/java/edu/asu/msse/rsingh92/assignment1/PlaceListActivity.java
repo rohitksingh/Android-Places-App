@@ -3,12 +3,15 @@ package edu.asu.msse.rsingh92.assignment1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PlaceLibraryActivity extends AppCompatActivity implements ListClickListener{
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener{
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
@@ -30,6 +33,32 @@ public class PlaceLibraryActivity extends AppCompatActivity implements ListClick
         Intent intent = new Intent(this, PlaceDetailActivity.class);
         intent.putExtra("Place", placeDescription);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.place_list_menu,menu);
+        return true;
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+        switch (item.getItemId())
+        {
+
+            case R.id.add:
+                Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+    }
+
 }
