@@ -6,6 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +38,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
     private PlaceAdapter adapter;
+    private List<PlaceDescription> allPlaces;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -42,15 +46,19 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         setContentView(R.layout.activity_placelibrary);
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
-        adapter = new PlaceAdapter(this, PlaceLibrary.getAllPlacesFronJson(this));
+        allPlaces = PlaceLibrary.getAllPlacesFronJson(this);
+        adapter = new PlaceAdapter(this, allPlaces);
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
     }
 
     @Override
-    public void itemClicked(PlaceDescription placeDescription) {
+    public void itemClicked(int index) {
+
+
         Intent intent = new Intent(this, PlaceDetailActivity.class);
-        intent.putExtra("Place", placeDescription);
+        intent.putExtra("Place", allPlaces.get(index));
+        intent.putExtra("OTHER_PLACES", (ArrayList<PlaceDescription>)allPlaces);
         startActivity(intent);
     }
 

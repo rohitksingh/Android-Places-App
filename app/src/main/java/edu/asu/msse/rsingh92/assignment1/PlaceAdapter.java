@@ -52,13 +52,13 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlaceViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PlaceViewHolder holder, final int position) {
         final PlaceDescription place = list.get(position);
         holder.name.setText(place.getName().toString());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listClickListener.itemClicked(place);
+                listClickListener.itemClicked(position);
             }
         });
     }

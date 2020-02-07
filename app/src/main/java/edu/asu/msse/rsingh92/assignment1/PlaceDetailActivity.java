@@ -6,8 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -29,11 +37,14 @@ import android.widget.Toast;
  * @version January 2016
  */
 
-public class PlaceDetailActivity extends AppCompatActivity {
+public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
-    private PlaceDescription place;
+    private TextView distance;
+    private Spinner placePicker;
+    private PlaceDescription currentPlace;
+    private List<PlaceDescription> otherPlaces;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +59,34 @@ public class PlaceDetailActivity extends AppCompatActivity {
         elevation = findViewById(R.id.elevation);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
+        distance = findViewById(R.id.distance);
+        placePicker = findViewById(R.id.placeSelector);
 
-        place = getPlace();
+        currentPlace = getCurrentPlace();
+        otherPlaces = getOtherPlaces();
+        populateSpinner();
 
-        name.setText(place.getName());
-        description.setText(place.getDescription());
-        category.setText(place.getCategory());
-        addressTitle.setText(place.getAddressTitle());
-        addressStreet.setText(place.getAddressStreet());
-        elevation.setText(place.getElevation());
-        latitude.setText(place.getLatitude());
-        longitude.setText(place.getLongitude());
+        name.setText(currentPlace.getName());
+        description.setText(currentPlace.getDescription());
+        category.setText(currentPlace.getCategory());
+        addressTitle.setText(currentPlace.getAddressTitle());
+        addressStreet.setText(currentPlace.getAddressStreet());
+        elevation.setText(currentPlace.getElevation());
+        latitude.setText(currentPlace.getLatitude());
+        longitude.setText(currentPlace.getLongitude());
 
     }
 
-    private PlaceDescription getPlace(){
+    private PlaceDescription getCurrentPlace(){
         PlaceDescription place = (PlaceDescription)getIntent().getSerializableExtra("Place");
         return place;
+    }
+
+    private List<PlaceDescription> getOtherPlaces(){
+
+        List<PlaceDescription> places = (ArrayList<PlaceDescription>) getIntent().getSerializableExtra(
+                "OTHER_PLACES");
+        return places;
     }
 
     @Override
@@ -94,6 +116,31 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+
+    }
+
+    private void populateSpinner(){
+
+        List<String> spinnerArray = new ArrayList<String>();
+
+        for(int i=0;i<otherPlaces.size();i++){
+            spinnerArray.add(otherPlaces.get(i).getName());
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+        placePicker.setAdapter(spinnerArrayAdapter);
+        placePicker.setOnItemSelectedListener(this);
+    }
+
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(this, "ItemClicked"+position, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 
