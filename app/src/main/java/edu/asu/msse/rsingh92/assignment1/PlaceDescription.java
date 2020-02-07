@@ -1,7 +1,5 @@
 package edu.asu.msse.rsingh92.assignment1;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 
