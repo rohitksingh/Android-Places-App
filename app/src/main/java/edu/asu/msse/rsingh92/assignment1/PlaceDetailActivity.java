@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -136,7 +137,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, "ItemClicked"+position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, currentPlace.getName()+" "+otherPlaces.get(position).getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
