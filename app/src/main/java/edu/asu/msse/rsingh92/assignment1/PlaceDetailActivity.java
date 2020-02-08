@@ -1,5 +1,6 @@
 package edu.asu.msse.rsingh92.assignment1;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +39,7 @@ import java.util.List;
  * @version January 2016
  */
 
-public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener , DialogCallBack{
+public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
@@ -106,11 +107,11 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         {
 
             case R.id.modify:
-                Toast.makeText(this, "Modify", Toast.LENGTH_SHORT).show();
+                openAddActivity();
                 return true;
 
             case R.id.remove:
-                Toast.makeText(this, "remove", Toast.LENGTH_SHORT).show();
+                AppUtility.openConfirmationDialog(this, "Do you want to remove this place");
                 return true;
 
             default:
@@ -145,15 +146,10 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     }
 
-    private void opendialog() {
 
-        ConfirmationDialog exampleDialog=new ConfirmationDialog(this);
-        exampleDialog.show(getSupportFragmentManager(),"example dialog");
-
+    private void openAddActivity(){
+        Intent intent = new Intent(this, AddPlaceActivity.class);
+        startActivity(intent);
     }
 
-    @Override
-    public void dialogResult(boolean result) {
-
-    }
 }

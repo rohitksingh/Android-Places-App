@@ -18,13 +18,14 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class ConfirmationDialog extends AppCompatDialogFragment {
 
-    AlertDialog.Builder builder;
-    private TextView editText;
+    private AlertDialog.Builder builder;
+    private TextView messageTextView;
     private Button ok, cancel;
     private DialogCallBack dialogcallback;
+    private String message;
 
-    public ConfirmationDialog(DialogCallBack dialogcallback){
-        this.dialogcallback = dialogcallback;
+    public ConfirmationDialog(String message){
+        this.message = message;
     }
 
 
@@ -34,7 +35,7 @@ public class ConfirmationDialog extends AppCompatDialogFragment {
         builder=new AlertDialog.Builder(getActivity());
         LayoutInflater inflater=getActivity().getLayoutInflater();
         View view=inflater.inflate(R.layout.dialog_confirmation,null);
-        editText = view.findViewById(R.id.editText);
+        messageTextView = view.findViewById(R.id.editText);
         ok = view.findViewById(R.id.ok);
         cancel = view.findViewById(R.id.cancel);
 
@@ -44,6 +45,7 @@ public class ConfirmationDialog extends AppCompatDialogFragment {
                 dismiss();
             }
         });
+        messageTextView.setText(message);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override

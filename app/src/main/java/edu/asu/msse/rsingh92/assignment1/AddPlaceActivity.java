@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AddPlaceActivity extends AppCompatActivity implements DialogCallBack{
+public class AddPlaceActivity extends AppCompatActivity{
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
 
@@ -43,8 +43,7 @@ public class AddPlaceActivity extends AppCompatActivity implements DialogCallBac
         {
 
             case R.id.save:
-                Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
-                opendialog();
+                AppUtility.openConfirmationDialog(this, "Do you want to save this place");
                 return true;
 
             default:
@@ -55,16 +54,12 @@ public class AddPlaceActivity extends AppCompatActivity implements DialogCallBac
     }
 
 
-    private void opendialog() {
+//    private void opendialog() {
+//
+//        ConfirmationDialog confirmationDialog=new ConfirmationDialog("Do you want to save this place");
+//        confirmationDialog.show(getSupportFragmentManager(),"example dialog");
+//
+//    }
 
-        ConfirmationDialog exampleDialog=new ConfirmationDialog(this);
-        exampleDialog.show(getSupportFragmentManager(),"example dialog");
 
-    }
-
-
-    @Override
-    public void dialogResult(boolean result) {
-
-    }
 }
