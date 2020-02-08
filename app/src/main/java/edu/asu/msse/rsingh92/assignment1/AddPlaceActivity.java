@@ -71,8 +71,8 @@ public class AddPlaceActivity extends AppCompatActivity{
         addressTitle.setText(currentPlace.getAddressTitle());
         addressStreet.setText(currentPlace.getAddressStreet());
         elevation.setText(currentPlace.getElevation());
-        latitude.setText(currentPlace.getLatitude());
-        longitude.setText(currentPlace.getLongitude());
+        latitude.setText(currentPlace.getLatitude().toString());
+        longitude.setText(currentPlace.getLongitude().toString());
     }
 
 }

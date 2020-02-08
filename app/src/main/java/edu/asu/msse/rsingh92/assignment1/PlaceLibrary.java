@@ -91,8 +91,8 @@ public class PlaceLibrary {
             place.setAddressTitle(obj.getString("address-title"));
             place.setAddressStreet(obj.getString("address-street"));
             place.setElevation(obj.getString("elevation"));
-            place.setLatitude(obj.getString("latitude"));
-            place.setLongitude(obj.getString("longitude"));
+            place.setLatitude(obj.getDouble("latitude"));
+            place.setLongitude(obj.getDouble("longitude"));
 
         }catch (JSONException e){
 

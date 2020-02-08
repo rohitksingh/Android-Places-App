@@ -43,7 +43,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
-    private TextView distance;
+    private TextView distance, bearing;
     private Spinner placePicker;
     private PlaceDescription currentPlace;
     private List<PlaceDescription> otherPlaces;
@@ -62,6 +62,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
         distance = findViewById(R.id.distance);
+        bearing = findViewById(R.id.bearing);
         placePicker = findViewById(R.id.placeSelector);
 
         currentPlace = getCurrentPlace();
@@ -74,8 +75,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         addressTitle.setText(currentPlace.getAddressTitle());
         addressStreet.setText(currentPlace.getAddressStreet());
         elevation.setText(currentPlace.getElevation());
-        latitude.setText(currentPlace.getLatitude());
-        longitude.setText(currentPlace.getLongitude());
+        latitude.setText(currentPlace.getLatitude().toString());
+        longitude.setText(currentPlace.getLongitude().toString());
 
     }
 
@@ -138,7 +139,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, currentPlace.getName()+" "+otherPlaces.get(position).getName(), Toast.LENGTH_SHORT).show();
+        setDistance(position);
+        setBearing(position);
     }
 
     @Override
@@ -152,6 +154,16 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         intent.setAction(AppUtility.MODIFY_PLACE);
         intent.putExtra(AppUtility.CURRENT_PLACE, currentPlace);
         startActivity(intent);
+    }
+
+    private void setDistance(int position){
+        Double calcDistance = AppUtility.getDistance(currentPlace, otherPlaces.get(position));
+        distance.setText(AppUtility.getKmString(calcDistance));
+    }
+
+    private void setBearing(int position){
+        Double bearingDistance = AppUtility.getBearing(currentPlace, otherPlaces.get(position));
+        bearing.setText(AppUtility.getKmString(bearingDistance));
     }
 
 }

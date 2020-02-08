@@ -25,7 +25,8 @@ import java.io.Serializable;
 
 public class PlaceDescription implements Serializable {
 
-    private String name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
+    private String name, description, category, addressTitle, addressStreet, elevation;
+    private Double latitude, longitude;
 
     public String getName() {
         return name;
@@ -75,19 +76,19 @@ public class PlaceDescription implements Serializable {
         this.elevation = elevation;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
