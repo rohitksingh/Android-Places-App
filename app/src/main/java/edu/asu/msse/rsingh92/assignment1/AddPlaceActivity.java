@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AddPlaceActivity extends AppCompatActivity{
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
+    private PlaceDescription currentPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -25,6 +26,7 @@ public class AddPlaceActivity extends AppCompatActivity{
         elevation = findViewById(R.id.elevation);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
+        getDataFromPreviousActivity();
     }
 
     @Override
@@ -54,12 +56,23 @@ public class AddPlaceActivity extends AppCompatActivity{
     }
 
 
-//    private void opendialog() {
-//
-//        ConfirmationDialog confirmationDialog=new ConfirmationDialog("Do you want to save this place");
-//        confirmationDialog.show(getSupportFragmentManager(),"example dialog");
-//
-//    }
+    private void getDataFromPreviousActivity(){
+        Intent intent = getIntent();
+        if(intent.getAction()!= null && intent.getAction().equals(AppUtility.MODIFY_PLACE)){
+            currentPlace = (PlaceDescription) intent.getSerializableExtra(AppUtility.CURRENT_PLACE);
+            setData();
+        }
+    }
 
+    private void setData(){
+        name.setText(currentPlace.getName());
+        description.setText(currentPlace.getDescription());
+        category.setText(currentPlace.getCategory());
+        addressTitle.setText(currentPlace.getAddressTitle());
+        addressStreet.setText(currentPlace.getAddressStreet());
+        elevation.setText(currentPlace.getElevation());
+        latitude.setText(currentPlace.getLatitude());
+        longitude.setText(currentPlace.getLongitude());
+    }
 
 }

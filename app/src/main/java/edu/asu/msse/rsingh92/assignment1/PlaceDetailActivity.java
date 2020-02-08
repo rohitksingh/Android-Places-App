@@ -149,6 +149,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     private void openAddActivity(){
         Intent intent = new Intent(this, AddPlaceActivity.class);
+        intent.setAction(AppUtility.MODIFY_PLACE);
+        intent.putExtra(AppUtility.CURRENT_PLACE, currentPlace);
         startActivity(intent);
     }
 
