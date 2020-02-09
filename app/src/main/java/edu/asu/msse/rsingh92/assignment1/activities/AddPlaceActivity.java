@@ -3,6 +3,7 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -33,10 +35,11 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @version January 2016
  */
-public class AddPlaceActivity extends AppCompatActivity{
+public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private PlaceDescription currentPlace;
+    private int INDEX;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -48,6 +51,7 @@ public class AddPlaceActivity extends AppCompatActivity{
         initViews();
         getDataFromPreviousActivity();
     }
+
 
     /***********************************************************************************************
      *                                  Menu Related methods
@@ -69,7 +73,6 @@ public class AddPlaceActivity extends AppCompatActivity{
 
             case R.id.save:
                 AppUtility.openConfirmationDialog(this, "Do you want to save this place");
-                savePlace();
                 return true;
 
             default:
@@ -87,6 +90,7 @@ public class AddPlaceActivity extends AppCompatActivity{
         Intent intent = getIntent();
         if(intent.getAction()!= null && intent.getAction().equals(AppUtility.MODIFY_PLACE)){
             currentPlace = (PlaceDescription) intent.getSerializableExtra(AppUtility.CURRENT_PLACE);
+            INDEX = intent.getIntExtra(AppUtility.INDEX,0);
             setData();
         }
     }
@@ -116,7 +120,13 @@ public class AddPlaceActivity extends AppCompatActivity{
     private void savePlace(){
 
         List<PlaceDescription> allPlace = AppUtility.getAllPlacesFromMemory();
-        allPlace.add(0, getPlaceFromView());
+
+        if(getIntent().getAction()!=null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
+            allPlace.set(INDEX, getPlaceFromView());
+        }else {
+            allPlace.add(0, getPlaceFromView());
+        }
+
         setResult(Activity.RESULT_OK);
         finish();
     }
@@ -136,4 +146,17 @@ public class AddPlaceActivity extends AppCompatActivity{
         return newPlace;
     }
 
+    private void modifyPlace(){
+        currentPlace = getPlaceFromView();
+    }
+
+    @Override
+    public void okButtonClicked() {
+        savePlace();
+    }
+
+    @Override
+    public void cancelButtonClicked() {
+
+    }
 }

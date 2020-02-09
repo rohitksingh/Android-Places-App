@@ -10,7 +10,6 @@ import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,8 +49,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     private Spinner placePicker;
     private PlaceDescription currentPlace;
     private List<PlaceDescription> otherPlaces;
-
     private int INDEX;
+    private boolean is_activity_modified = false;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -66,6 +65,23 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         populateSpinner();
         setDataToViews();
 
+    }
+
+    @Override
+    public void onActivityResult(int req, int res, Intent intent){
+        if(req==8000 && res == Activity.RESULT_OK){
+            currentPlace = AppUtility.getAllPlacesFromMemory().get(INDEX);
+            setDataToViews();
+            is_activity_modified = true;
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(is_activity_modified){
+            setResult(Activity.RESULT_OK);
+        }
+        super.onBackPressed();
     }
 
     /***********************************************************************************************
@@ -124,7 +140,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         Intent intent = new Intent(this, AddPlaceActivity.class);
         intent.setAction(AppUtility.MODIFY_PLACE);
         intent.putExtra(AppUtility.CURRENT_PLACE, currentPlace);
-        startActivity(intent);
+        intent.putExtra(AppUtility.INDEX,INDEX);
+        startActivityForResult(intent,8000);
     }
 
     private void setDistance(int position){

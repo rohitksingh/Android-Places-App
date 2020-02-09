@@ -63,6 +63,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         placeRecyclerView.setAdapter(adapter);
     }
 
+
     @Override
     public void onActivityResult(int req, int res, Intent intent){
         if(req==8090){
@@ -73,6 +74,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
                 placeRecyclerView.setAdapter(adapter);
             }
         }
+
     }
 
     /***********************************************************************************************

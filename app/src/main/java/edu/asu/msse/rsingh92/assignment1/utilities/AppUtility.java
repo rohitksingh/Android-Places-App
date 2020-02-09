@@ -31,8 +31,9 @@ import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 
 public class AppUtility {
 
-    public static String MODIFY_PLACE="edu.asu.msse.rsingh92.assignment1.utilities.AppUtility.MODIFY_PLACE";
-    public static String CURRENT_PLACE="edu.asu.msse.rsingh92.assignment1.utilities.AppUtility.CURRENT_PLACE";
+    public static String MODIFY_PLACE="AppUtility.MODIFY_PLACE";
+    public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
+    public static String INDEX = "AppUtility.INDEX";
     private static List<PlaceDescription> allplaces;
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
