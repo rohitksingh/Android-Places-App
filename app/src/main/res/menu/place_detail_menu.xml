@@ -6,11 +6,13 @@
         android:orderInCategory="10"
         android:title="Modify"
         app:showAsAction="always"
+        android:icon="@drawable/icon_edit"
         />
     <item
         android:id="@+id/remove"
         android:orderInCategory="100"
         android:title="Remove"
         app:showAsAction="always"
+        android:icon="@drawable/icon_delete"
         />
 </menu>
