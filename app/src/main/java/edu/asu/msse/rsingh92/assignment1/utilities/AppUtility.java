@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.dialogs.ConfirmationDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 
@@ -35,7 +36,7 @@ public class AppUtility {
     private static List<PlaceDescription> allplaces;
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
-        ConfirmationDialog confirmationDialog=new ConfirmationDialog(msg);
+        ConfirmationDialog confirmationDialog=new ConfirmationDialog((ConfirmationDialogCallback)activity, msg);
         confirmationDialog.show(activity.getSupportFragmentManager(),"example dialog");
     }
 

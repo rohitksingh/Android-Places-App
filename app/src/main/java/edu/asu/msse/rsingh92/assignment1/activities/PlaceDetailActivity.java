@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -42,7 +43,7 @@ import java.util.List;
  * @version January 2016
  */
 
-public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ConfirmationDialogCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private TextView distance, bearing;
@@ -92,7 +93,6 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
             case R.id.remove:
                 AppUtility.openConfirmationDialog(this, "Do you want to remove this place");
-                deletePlace();
                 return true;
 
             default:
@@ -200,4 +200,13 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         finish();
     }
 
+    @Override
+    public void okButtonClicked() {
+        deletePlace();
+    }
+
+    @Override
+    public void cancelButtonClicked() {
+
+    }
 }

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -41,8 +42,11 @@ public class ConfirmationDialog extends AppCompatDialogFragment {
     private TextView messageTextView;
     private Button ok, cancel;
     private String message;
+    private ConfirmationDialogCallback callback;
 
-    public ConfirmationDialog(String message){
+    public ConfirmationDialog(ConfirmationDialogCallback callback, String message){
+
+        this.callback = callback;
         this.message = message;
     }
 
@@ -59,6 +63,7 @@ public class ConfirmationDialog extends AppCompatDialogFragment {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                callback.okButtonClicked();
                 dismiss();
             }
         });
@@ -67,7 +72,7 @@ public class ConfirmationDialog extends AppCompatDialogFragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                callback.cancelButtonClicked();
                 dismiss();
             }
         });
