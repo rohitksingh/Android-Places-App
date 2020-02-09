@@ -3,7 +3,6 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -33,7 +32,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @author Rohit Kumar Singh rsingh92@asu.edu
  *
- * @version January 2016
+ * @version February 2016
  */
 public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback {
 

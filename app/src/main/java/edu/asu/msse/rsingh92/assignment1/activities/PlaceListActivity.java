@@ -17,7 +17,6 @@ import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
-import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 import edu.asu.msse.rsingh92.assignment1.R;
 
 /*
@@ -37,7 +36,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @author Rohit Kumar Singh rsingh92@asu.edu
  *
- * @version January 2016
+ * @version February 2016
  */
 
 public class PlaceListActivity extends AppCompatActivity implements ListClickListener {

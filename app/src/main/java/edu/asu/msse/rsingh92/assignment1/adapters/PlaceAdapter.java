@@ -31,7 +31,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @author Rohit Kumar Singh rsingh92@asu.edu
  *
- * @version January 2016
+ * @version February 2016
  */
 
 public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder> {

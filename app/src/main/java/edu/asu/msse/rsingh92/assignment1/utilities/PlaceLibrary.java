@@ -30,7 +30,7 @@ import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
  *
  * @author Rohit Kumar Singh rsingh92@asu.edu
  *
- * @version January 2016
+ * @version February 2016
  */
 
 public class PlaceLibrary {
