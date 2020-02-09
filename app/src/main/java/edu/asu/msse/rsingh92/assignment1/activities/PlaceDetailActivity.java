@@ -1,5 +1,6 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,6 +9,7 @@ import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +49,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     private Spinner placePicker;
     private PlaceDescription currentPlace;
     private List<PlaceDescription> otherPlaces;
+
+    private int INDEX;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -88,6 +92,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
             case R.id.remove:
                 AppUtility.openConfirmationDialog(this, "Do you want to remove this place");
+                deletePlace();
                 return true;
 
             default:
@@ -147,6 +152,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     private void getDataFromIntent(){
         currentPlace = getCurrentPlace();
         otherPlaces = getOtherPlaces();
+        INDEX = getIntent().getIntExtra("INDEX",0);
     }
 
     private void populateSpinner(){
@@ -185,6 +191,13 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         elevation.setText(currentPlace.getElevation());
         latitude.setText(currentPlace.getLatitude().toString());
         longitude.setText(currentPlace.getLongitude().toString());
+    }
+
+    private void deletePlace(){
+        List<PlaceDescription> allplaces = AppUtility.getAllPlacesFromMemory();
+        allplaces.remove(INDEX);
+        setResult(Activity.RESULT_OK);
+        finish();
     }
 
 }

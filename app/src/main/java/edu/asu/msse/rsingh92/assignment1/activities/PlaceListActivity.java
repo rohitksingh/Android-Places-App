@@ -3,6 +3,7 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -62,16 +63,24 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         placeRecyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void onActivityResult(int req, int res, Intent intent){
+        if(req==8090){
+            if(res== Activity.RESULT_OK){
+                Log.d("Refresh","refresh");
+                allPlaces = AppUtility.getAllPlacesFromMemory();
+                adapter = new PlaceAdapter(this,allPlaces);
+                placeRecyclerView.setAdapter(adapter);
+            }
+        }
+    }
+
     /***********************************************************************************************
      *                                  Callback methods
      ***********************************************************************************************/
     @Override
     public void itemClicked(int index) {
-
-        Intent intent = new Intent(this, PlaceDetailActivity.class);
-        intent.putExtra("Place", allPlaces.get(index));
-        intent.putExtra("OTHER_PLACES", (ArrayList<PlaceDescription>)allPlaces);
-        startActivity(intent);
+        openDetailActivity(index);
     }
 
 
@@ -112,14 +121,12 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         startActivityForResult(intent, 8090);
     }
 
-    @Override
-    public void onActivityResult(int req, int res, Intent intent){
-        if(req==8090){
-            if(res== Activity.RESULT_OK){
-                allPlaces = AppUtility.getAllPlacesFromMemory();
-                adapter = new PlaceAdapter(this,allPlaces);
-                placeRecyclerView.setAdapter(adapter);
-            }
-        }
+    private void openDetailActivity(int index){
+        Intent intent = new Intent(this, PlaceDetailActivity.class);
+        intent.putExtra("Place", allPlaces.get(index));
+        intent.putExtra("OTHER_PLACES", (ArrayList<PlaceDescription>)allPlaces);
+        intent.putExtra("INDEX",index);
+        startActivityForResult(intent,8090);
     }
+
 }
