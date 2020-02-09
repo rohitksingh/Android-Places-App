@@ -1,4 +1,4 @@
-package edu.asu.msse.rsingh92.assignment1;
+package edu.asu.msse.rsingh92.assignment1.utilities;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,

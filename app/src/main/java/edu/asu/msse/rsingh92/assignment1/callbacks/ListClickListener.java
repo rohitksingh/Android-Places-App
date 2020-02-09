@@ -1,4 +1,4 @@
-package edu.asu.msse.rsingh92.assignment1;
+package edu.asu.msse.rsingh92.assignment1.callbacks;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -23,4 +23,5 @@ package edu.asu.msse.rsingh92.assignment1;
 public interface ListClickListener {
 
     public void itemClicked(int index);
+
 }

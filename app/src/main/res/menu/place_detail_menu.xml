@@ -6,7 +6,6 @@
         android:orderInCategory="10"
         android:title="Modify"
         app:showAsAction="always"
-
         />
     <item
         android:id="@+id/remove"

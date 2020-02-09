@@ -1,5 +1,4 @@
-package edu.asu.msse.rsingh92.assignment1;
-
+package edu.asu.msse.rsingh92.assignment1.models;
 
 import java.io.Serializable;
 

@@ -1,11 +1,33 @@
-package edu.asu.msse.rsingh92.assignment1;
+package edu.asu.msse.rsingh92.assignment1.utilities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.asu.msse.rsingh92.assignment1.dialogs.ConfirmationDialog;
+import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
+
+/*
+ * Copyright 2020 Rohit Kumar Singh,
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * @author Rohit Kumar Singh rsingh92@asu.edu
+ *
+ * @version January 2016
+ */
 
 public class AppUtility {
 
-    public static String MODIFY_PLACE="edu.asu.msse.rsingh92.assignment1.AppUtility.MODIFY_PLACE";
-    public static String CURRENT_PLACE="edu.asu.msse.rsingh92.assignment1.AppUtility.CURRENT_PLACE";
+    public static String MODIFY_PLACE="edu.asu.msse.rsingh92.assignment1.utilities.AppUtility.MODIFY_PLACE";
+    public static String CURRENT_PLACE="edu.asu.msse.rsingh92.assignment1.utilities.AppUtility.CURRENT_PLACE";
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
         ConfirmationDialog confirmationDialog=new ConfirmationDialog(msg);
@@ -65,7 +87,7 @@ public class AppUtility {
 
     public static String getKmString(Double distance){
         String value = String.format("%.2f",distance);
-        return value = value+" KM";
+        return value+" KM";
     }
 
 }

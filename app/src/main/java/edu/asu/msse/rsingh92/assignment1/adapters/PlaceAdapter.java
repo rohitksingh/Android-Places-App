@@ -1,7 +1,6 @@
-package edu.asu.msse.rsingh92.assignment1;
+package edu.asu.msse.rsingh92.assignment1.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,9 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
+import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
+import edu.asu.msse.rsingh92.assignment1.R;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -68,19 +70,14 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
         return list.size();
     }
 
-    public class PlaceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class PlaceViewHolder extends RecyclerView.ViewHolder{
 
         public TextView name;
 
         public PlaceViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
-            name.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-
-        }
     }
 }

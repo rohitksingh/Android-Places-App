@@ -1,10 +1,9 @@
-package edu.asu.msse.rsingh92.assignment1;
+package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,11 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
+import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
+import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
+import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
+import edu.asu.msse.rsingh92.assignment1.R;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -33,13 +37,16 @@ import androidx.recyclerview.widget.RecyclerView;
  * @version January 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener{
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
     private PlaceAdapter adapter;
     private List<PlaceDescription> allPlaces;
 
+    /***********************************************************************************************
+     *                                  Lifecycle methods
+     ***********************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -52,6 +59,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         placeRecyclerView.setAdapter(adapter);
     }
 
+    /***********************************************************************************************
+     *                                  Callback methods
+     ***********************************************************************************************/
     @Override
     public void itemClicked(int index) {
 
@@ -61,6 +71,10 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         startActivity(intent);
     }
 
+
+    /***********************************************************************************************
+     *                                  Menu Related methods
+     ***********************************************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -87,11 +101,12 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
     }
 
-
+    /***********************************************************************************************
+     *                                  Private methods
+     ***********************************************************************************************/
     private void openAddPlaceActivity(){
         Intent intent = new Intent(this, AddPlaceActivity.class);
         startActivity(intent);
     }
-
 
 }
