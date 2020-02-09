@@ -5,52 +5,98 @@
     android:orientation="vertical"
     android:gravity="center"
     >
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
-        />
-    <EditText
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
+        style="@style/EditTextWrapperStyle"
+        >
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Description"
-        />
-    <EditText
-        android:id="@+id/category"
-        android:layout_width="wrap_content"
+        style="@style/EditTextWrapperStyle">
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Category"
-        />
-    <EditText
-        android:id="@+id/addressTitle"
-        android:layout_width="wrap_content"
+        style="@style/EditTextWrapperStyle">
+        <EditText
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Address Title"
-        />
-    <EditText
-        android:id="@+id/addressStreet"
-        android:layout_width="wrap_content"
+        style="@style/EditTextWrapperStyle">
+        <EditText
+            android:id="@+id/addressTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address Title"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Address Street"
-        />
-    <EditText
-        android:id="@+id/elevation"
-        android:layout_width="wrap_content"
+        style="@style/EditTextWrapperStyle">
+        <EditText
+            android:id="@+id/addressStreet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address Street"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Elevation"
-        />
-    <EditText
-        android:id="@+id/latitude"
-        android:layout_width="wrap_content"
+        style="@style/EditTextWrapperStyle"
+        >
+        <EditText
+            android:id="@+id/elevation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Elevation"
+            android:inputType="numberSigned"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Latitude"
-        />
-    <EditText
-        android:id="@+id/longitude"
-        android:layout_width="wrap_content"
+        style="@style/EditTextWrapperStyle">
+        <EditText
+            android:id="@+id/latitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Latitude"
+            android:inputType="numberSigned"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Longitude"
-        />
+        style="@style/EditTextWrapperStyle">
+        <EditText
+            android:id="@+id/longitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Longitude"
+            android:inputType="numberSigned"
+            style="@style/EditTextStyle"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>
