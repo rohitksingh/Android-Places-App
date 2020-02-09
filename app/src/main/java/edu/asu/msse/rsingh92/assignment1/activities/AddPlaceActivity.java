@@ -1,10 +1,13 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
@@ -66,6 +69,7 @@ public class AddPlaceActivity extends AppCompatActivity{
 
             case R.id.save:
                 AppUtility.openConfirmationDialog(this, "Do you want to save this place");
+                savePlace();
                 return true;
 
             default:
@@ -107,6 +111,29 @@ public class AddPlaceActivity extends AppCompatActivity{
         elevation = findViewById(R.id.elevation);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
+    }
+
+    private void savePlace(){
+
+        List<PlaceDescription> allPlace = AppUtility.getAllPlacesFromMemory();
+        allPlace.add(0, getPlaceFromView());
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+    private PlaceDescription getPlaceFromView(){
+
+        PlaceDescription newPlace = new PlaceDescription();
+        newPlace.setName(name.getText().toString());
+        newPlace.setDescription(description.getText().toString());
+        newPlace.setAddressStreet(addressStreet.getText().toString());
+        newPlace.setAddressTitle(addressTitle.getText().toString());
+        newPlace.setCategory(category.getText().toString());
+        newPlace.setElevation(elevation.getText().toString());
+        newPlace.setLatitude(Double.valueOf(latitude.getText().toString()));
+        newPlace.setLongitude(Double.valueOf(longitude.getText().toString()));
+
+        return newPlace;
     }
 
 }

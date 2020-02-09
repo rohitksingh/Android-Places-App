@@ -1,5 +1,9 @@
 package edu.asu.msse.rsingh92.assignment1.utilities;
 
+import android.content.Context;
+
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.dialogs.ConfirmationDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
@@ -28,6 +32,7 @@ public class AppUtility {
 
     public static String MODIFY_PLACE="edu.asu.msse.rsingh92.assignment1.utilities.AppUtility.MODIFY_PLACE";
     public static String CURRENT_PLACE="edu.asu.msse.rsingh92.assignment1.utilities.AppUtility.CURRENT_PLACE";
+    private static List<PlaceDescription> allplaces;
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
         ConfirmationDialog confirmationDialog=new ConfirmationDialog(msg);
@@ -89,5 +94,14 @@ public class AppUtility {
         String value = String.format("%.2f",distance);
         return value+" KM";
     }
+
+    public static void loadAllPlacesInMemory(Context context){
+        allplaces = PlaceLibrary.getAllPlacesFronJson(context);
+    }
+
+    public static List<PlaceDescription> getAllPlacesFromMemory(){
+        return allplaces;
+    }
+
 
 }

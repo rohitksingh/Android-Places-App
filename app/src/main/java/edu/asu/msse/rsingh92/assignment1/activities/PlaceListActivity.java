@@ -1,5 +1,6 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
+import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 import edu.asu.msse.rsingh92.assignment1.R;
 
@@ -51,9 +53,10 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
+        AppUtility.loadAllPlacesInMemory(this);
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
-        allPlaces = PlaceLibrary.getAllPlacesFronJson(this);
+        allPlaces = AppUtility.getAllPlacesFromMemory();//PlaceLibrary.getAllPlacesFronJson(this);
         adapter = new PlaceAdapter(this, allPlaces);
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
@@ -106,7 +109,17 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
      ***********************************************************************************************/
     private void openAddPlaceActivity(){
         Intent intent = new Intent(this, AddPlaceActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 8090);
     }
 
+    @Override
+    public void onActivityResult(int req, int res, Intent intent){
+        if(req==8090){
+            if(res== Activity.RESULT_OK){
+                allPlaces = AppUtility.getAllPlacesFromMemory();
+                adapter = new PlaceAdapter(this,allPlaces);
+                placeRecyclerView.setAdapter(adapter);
+            }
+        }
+    }
 }
