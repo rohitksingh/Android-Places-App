@@ -89,7 +89,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/EditTextWrapperStyle">
+        style="@style/NonEditTextStyle">
         <EditText
             android:id="@+id/longitude"
             android:layout_width="match_parent"
