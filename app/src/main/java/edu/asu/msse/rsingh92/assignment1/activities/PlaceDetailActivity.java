@@ -151,7 +151,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     private void setBearing(int position){
         Double bearingDistance = AppUtility.getBearing(currentPlace, otherPlaces.get(position));
-        bearing.setText(AppUtility.getKmString(bearingDistance));
+        bearing.setText(AppUtility.getDegreeString(bearingDistance));
     }
 
     private PlaceDescription getCurrentPlace(){

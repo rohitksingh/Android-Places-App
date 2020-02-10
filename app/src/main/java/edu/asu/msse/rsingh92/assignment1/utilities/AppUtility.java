@@ -85,7 +85,7 @@ public class AppUtility {
 
         lon2 = place.getLongitude();
 
-        double longDiff= Math.toRadians(lon1-lon2);
+        double longDiff= Math.toRadians(lon2-lon1);
         double y= Math.sin(longDiff)*Math.cos(lat2);
         double x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(longDiff);
 
@@ -95,6 +95,11 @@ public class AppUtility {
     public static String getKmString(Double distance){
         String value = String.format("%.2f",distance);
         return value+" KM";
+    }
+
+    public static String getDegreeString(Double distance){
+        String value = String.format("%.2f",distance);
+        return value+" Degree";
     }
 
     public static void loadAllPlacesInMemory(Context context){
