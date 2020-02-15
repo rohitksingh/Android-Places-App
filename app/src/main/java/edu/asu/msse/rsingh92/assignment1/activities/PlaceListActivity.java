@@ -17,6 +17,7 @@ import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
 import edu.asu.msse.rsingh92.assignment1.RPC.MethodInformation;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -41,7 +42,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  * @version February 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener {
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
@@ -56,20 +57,14 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
 
-        // initiate request to server to get the names of all students to be placed in the spinner
-        try{
-            MethodInformation mi = new MethodInformation(this, getString(R.string.defaulturl),"getNames",
-                    new Object[]{});
-            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-        } catch (Exception ex) {
-            android.util.Log.w(this.getClass().getSimpleName(), "Exception creating adapter: " +
-                    ex.getMessage());
-        }
+        loadListFromRPC();
 
-        AppUtility.loadAllPlacesInMemory(this);
+        // initiate request to server to get the names of all students to be placed in the spinner
+
+//        AppUtility.loadAllPlacesInMemory(this);
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
-        allPlaces = AppUtility.getAllPlacesFromMemory();//PlaceLibrary.getAllPlacesFronJson(this);
+        allPlaces = new ArrayList<PlaceDescription>();//PlaceLibrary.getAllPlacesFronJson(this);
         adapter = new PlaceAdapter(this, allPlaces);
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
@@ -143,4 +138,26 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         startActivityForResult(intent,8090);
     }
 
+
+    private void loadListFromRPC(){
+
+        try{
+            MethodInformation mi = new MethodInformation(this, getString(R.string.defaulturl),"getNames",
+                    new Object[]{});
+            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(), "Exception creating adapter: " +
+                    ex.getMessage());
+        }
+
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
+
+        allPlaces = (List<PlaceDescription>)object;
+        adapter = new PlaceAdapter(this, allPlaces);
+        placeRecyclerView.setAdapter(adapter);
+
+    }
 }

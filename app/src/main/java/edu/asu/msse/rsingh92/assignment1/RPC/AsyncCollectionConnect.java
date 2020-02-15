@@ -9,6 +9,9 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+
+import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 
 public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer, MethodInformation> {
 
@@ -29,8 +32,10 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
             String requestData = "{ \"jsonrpc\":\"2.0\", \"method\":\""+aRequest[0].method+"\", \"params\":"+ja.toString()+
                     ",\"id\":3}";
             android.util.Log.d(this.getClass().getSimpleName(),"requestData: "+requestData+" url: "+aRequest[0].urlString);
-            JsonRPCRequestViaHttp conn = new JsonRPCRequestViaHttp((new URL(aRequest[0].urlString)), aRequest[0].parent);
+            JsonRPCRequestViaHttp conn = new JsonRPCRequestViaHttp((new URL(aRequest[0].urlString)));
             aRequest[0].resultAsJson = conn.call(requestData);
+
+
         }catch (Exception ex){
             android.util.Log.d(this.getClass().getSimpleName(),"exception in remote call "+
                     ex.getMessage());
@@ -70,46 +75,56 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
                 }
                 String[] names = al.toArray(new String[0]);
 
+                List<PlaceDescription> places = new ArrayList<>();
 
                 for (int i = 0; i < names.length; i++) {
                     Log.d("SARVANSH",names[i]);
+
+                    PlaceDescription place = new PlaceDescription();
+                    place.setName(names[i]);
+                    places.add(place);
                 }
+
+
+                res.callback.resultLoaded(places);
+
+
 
 //                res.parent.adapter.clear();
 //                for (int i = 0; i < names.length; i++) {
 //                    res.parent.adapter.add(names[i]);
 //                }
 //                res.parent.adapter.notifyDataSetChanged();
-                if (names.length > 0){
-                    try{
-                        // got the list of student names from the server, so now create a new async task
-                        // to get the student information about the first student and populate the UI with
-                        // that student's information.
-                        MethodInformation mi = new MethodInformation(res.parent, res.urlString, "get",
-                                new String[]{names[0]});
-                        AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-                    } catch (Exception ex){
-                        android.util.Log.w(this.getClass().getSimpleName(),"Exception processing spinner selection: "+
-                                ex.getMessage());
-                    }
-                }
+//                if (names.length > 0){
+//                    try{
+//                        // got the list of student names from the server, so now create a new async task
+//                        // to get the student information about the first student and populate the UI with
+//                        // that student's information.
+//                        MethodInformation mi = new MethodInformation(res.parent, res.urlString, "get",
+//                                new String[]{names[0]});
+//                        AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+//                    } catch (Exception ex){
+//                        android.util.Log.w(this.getClass().getSimpleName(),"Exception processing spinner selection: "+
+//                                ex.getMessage());
+//                    }
+//                }
             } else if (res.method.equals("get")) {
-                JSONObject jo = new JSONObject(res.resultAsJson);
-
-                Log.d("SARVANSH",jo.toString());
-
-//                Student aStud = new Student(jo.getJSONObject("result"));
-//                res.parent.studentidET.setText((new Integer(aStud.studentid)).toString());
-//                res.parent.nameET.setText(aStud.name);
+//                JSONObject jo = new JSONObject(res.resultAsJson);
+//
+//                Log.d("SARVANSH",jo.toString());
+//
+////                Student aStud = new Student(jo.getJSONObject("result"));
+////                res.parent.studentidET.setText((new Integer(aStud.studentid)).toString());
+////                res.parent.nameET.setText(aStud.name);
             } else if (res.method.equals("add")){
-                try{
-                    // finished adding a student. refresh the list of students by going back to the server for names
-                    MethodInformation mi = new MethodInformation(res.parent, res.urlString, "getNames", new Object[]{ });
-                    AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-                } catch (Exception ex){
-                    android.util.Log.w(this.getClass().getSimpleName(),"Exception processing getNames: "+
-                            ex.getMessage());
-                }
+//                try{
+//                    // finished adding a student. refresh the list of students by going back to the server for names
+//                    MethodInformation mi = new MethodInformation(res.parent, res.urlString, "getNames", new Object[]{ });
+//                    AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+//                } catch (Exception ex){
+//                    android.util.Log.w(this.getClass().getSimpleName(),"Exception processing getNames: "+
+//                            ex.getMessage());
+//                }
             }
         }catch (Exception ex){
             android.util.Log.d(this.getClass().getSimpleName(),"Exception: "+ex.getMessage());
