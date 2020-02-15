@@ -13,6 +13,8 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
+import edu.asu.msse.rsingh92.assignment1.RPC.MethodInformation;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
@@ -53,6 +55,17 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
+
+        // initiate request to server to get the names of all students to be placed in the spinner
+        try{
+            MethodInformation mi = new MethodInformation(this, getString(R.string.defaulturl),"getNames",
+                    new Object[]{});
+            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(), "Exception creating adapter: " +
+                    ex.getMessage());
+        }
+
         AppUtility.loadAllPlacesInMemory(this);
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
