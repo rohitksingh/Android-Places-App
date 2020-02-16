@@ -43,7 +43,7 @@ import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
  * @version February 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener {
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
@@ -62,13 +62,13 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
         // initiate request to server to get the names of all students to be placed in the spinner
 
-//        AppUtility.loadAllPlacesInMemory(this);
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
-        allPlaces = PlaceLibrary.getAllPlacesFronJson(this);
+        allPlaces = AppUtility.getAllPlacesFromMemory();
         adapter = new PlaceAdapter(this, allPlaces);
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
+
     }
 
 
@@ -140,4 +140,8 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     }
 
 
+    @Override
+    public void resultLoaded(Object object) {
+
+    }
 }

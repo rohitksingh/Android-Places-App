@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.RPC.DeletePlaceAsyncTask;
+import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.dialogs.ConfirmationDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 
@@ -103,12 +107,22 @@ public class AppUtility {
         return value+" Degree";
     }
 
-    public static void loadAllPlacesInMemory(Context context){
-        allplaces = PlaceLibrary.getAllPlacesFronJson(context);
-    }
+//    public static void loadAllPlacesInMemory(Context context){
+//        allplaces = PlaceLibrary.getAllPlacesFronJson(context);
+//    }
 
     public static List<PlaceDescription> getAllPlacesFromMemory(){
         return allplaces;
+    }
+
+
+    public static void deleteItem(Context context, String placeName){
+
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"remove",
+                new String[]{placeName});
+        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
+        deletePlaceAsyncTask.execute(mi);
+
     }
 
 

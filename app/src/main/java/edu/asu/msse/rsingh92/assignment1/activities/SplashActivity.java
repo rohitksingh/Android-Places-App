@@ -9,6 +9,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
+import edu.asu.msse.rsingh92.assignment1.RPC.DeletePlaceAsyncTask;
 import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 
@@ -43,4 +44,6 @@ public class SplashActivity extends AppCompatActivity implements RPCCallback {
         }
 
     }
+
+
 }

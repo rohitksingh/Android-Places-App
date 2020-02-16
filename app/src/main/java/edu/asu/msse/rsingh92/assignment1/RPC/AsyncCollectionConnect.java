@@ -44,7 +44,6 @@ public class AsyncCollectionConnect extends AsyncTask<RPCMethodMetadata, Integer
             JsonRPCRequestViaHttp conn = new JsonRPCRequestViaHttp((new URL(aRequest[0].urlString)));
             aRequest[0].resultAsJson = conn.call(requestData);
 
-
         }catch (Exception ex){
             android.util.Log.d(this.getClass().getSimpleName(),"exception in remote call "+
                     ex.getMessage());
@@ -88,73 +87,30 @@ public class AsyncCollectionConnect extends AsyncTask<RPCMethodMetadata, Integer
 
                 allPlaces = AppUtility.getAllPlacesFromMemory();
 
-//                for (int i = 0; i < names.length; i++) {
-//
-//                    Log.d("WOAH", "onPostExecute: "+ names[i]);
-//
-//                    PlaceDescription place = new PlaceDescription();
-//                    place.setName(names[i]);
-//                    places.add(place);
-//                }
-
-
-
-//                res.callback.resultLoaded(places);
-
                 for(int i=0;i<names.length;i++){
 
-                    Log.d("WOAH", "onPostExecute: "+ names.length);
-
-//                    Log.d("WOAH", "onPostExecute: "+names[i]);
-//
                     RPCMethodMetadata mi = new RPCMethodMetadata(res.callback, res.urlString, "get", new String[]{names[i]});
                     AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
                 }
 
-
-
-//                res.parent.adapter.clear();
-//                for (int i = 0; i < names.length; i++) {
-//                    res.parent.adapter.add(names[i]);
-//                }
-//                res.parent.adapter.notifyDataSetChanged();
-//                if (names.length > 0){
-//                    try{
-//                        // got the list of student names from the server, so now create a new async task
-//                        // to get the student information about the first student and populate the UI with
-//                        // that student's information.
-//                        MethodInformation mi = new MethodInformation(res.parent, res.urlString, "get",
-//                                new String[]{names[0]});
-//                        AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-//                    } catch (Exception ex){
-//                        android.util.Log.w(this.getClass().getSimpleName(),"Exception processing spinner selection: "+
-//                                ex.getMessage());
-//                    }
-//                }
             } else if (res.method.equals("get")) {
 
-                Log.d("WOAH", "inside");
 
                 JSONObject jo = new JSONObject(res.resultAsJson);
 
                 PlaceDescription place = PlaceLibrary.getPlaceHolderFromJsonObject(jo.getJSONObject("result"));
-                Log.d("PLACENAME", place.toString());
+                Log.d("ADDME", place.getName());
 
-                allPlaces.add(place);
+//                allPlaces.add(place);
+                AppUtility.getAllPlacesFromMemory().add(place);
 
-
+                Log.d("SUCCESS", allPlaces.size()+" "+list_size);
                 if(allPlaces.size()==list_size){
                     Log.d("SUCCESS", ""+(res.callback==null));
                     res.callback.resultLoaded(allPlaces);
                 }
 
 
-
-
-
-//               Student aStud = new Student(jo.getJSONObject("result"));
-//                res.parent.studentidET.setText((new Integer(aStud.studentid)).toString());
-//                res.parent.nameET.setText(aStud.name);
             } else if (res.method.equals("add")){
 //                try{
 //                    // finished adding a student. refresh the list of students by going back to the server for names

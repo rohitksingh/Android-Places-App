@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ import java.util.List;
  * @version February 2016
  */
 
-public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ConfirmationDialogCallback {
+public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ConfirmationDialogCallback, RPCCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private TextView distance, bearing;
@@ -211,10 +213,15 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void deletePlace(){
+
         List<PlaceDescription> allplaces = AppUtility.getAllPlacesFromMemory();
+        String name = allplaces.get(INDEX).getName();
         allplaces.remove(INDEX);
         setResult(Activity.RESULT_OK);
+        AppUtility.deleteItem(this, name);
+        Toast.makeText(this, "Removing "+name, Toast.LENGTH_SHORT).show();
         finish();
+
     }
 
     @Override
@@ -224,6 +231,11 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void cancelButtonClicked() {
+
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
 
     }
 }
