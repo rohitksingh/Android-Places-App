@@ -21,6 +21,7 @@ import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -42,7 +43,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  * @version February 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback {
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
@@ -57,14 +58,14 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
 
-        loadListFromRPC();
+
 
         // initiate request to server to get the names of all students to be placed in the spinner
 
 //        AppUtility.loadAllPlacesInMemory(this);
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
-        allPlaces = new ArrayList<PlaceDescription>();//PlaceLibrary.getAllPlacesFronJson(this);
+        allPlaces = PlaceLibrary.getAllPlacesFronJson(this);
         adapter = new PlaceAdapter(this, allPlaces);
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
@@ -139,25 +140,4 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     }
 
 
-    private void loadListFromRPC(){
-
-        try{
-            RPCMethodMetadata mi = new RPCMethodMetadata(this, getString(R.string.defaulturl),"getNames",
-                    new Object[]{});
-            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
-        } catch (Exception ex) {
-            android.util.Log.w(this.getClass().getSimpleName(), "Exception creating adapter: " +
-                    ex.getMessage());
-        }
-
-    }
-
-    @Override
-    public void resultLoaded(Object object) {
-
-        allPlaces = (List<PlaceDescription>)object;
-        adapter = new PlaceAdapter(this, allPlaces);
-        placeRecyclerView.setAdapter(adapter);
-
-    }
 }

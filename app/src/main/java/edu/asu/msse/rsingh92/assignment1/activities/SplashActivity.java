@@ -8,8 +8,11 @@ import com.airbnb.lottie.LottieAnimationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
+import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements RPCCallback {
 
     LottieAnimationView lottieAnimationView;
 
@@ -18,29 +21,26 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savesInstanceState);
         setContentView(R.layout.activity_splash);
         lottieAnimationView = findViewById(R.id.splash_anim);
+        loadListFromRPC();
+    }
 
-        lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+    @Override
+    public void resultLoaded(Object object) {
+        startActivity(new Intent(SplashActivity.this, PlaceListActivity.class));
+        finish();
+    }
 
-            }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                startActivity(new Intent(SplashActivity.this, PlaceListActivity.class));
-                finish();
-            }
+    private void loadListFromRPC(){
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
+        try{
+            RPCMethodMetadata mi = new RPCMethodMetadata(this, getString(R.string.defaulturl),"getNames",
+                    new Object[]{});
+            AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+        } catch (Exception ex) {
+            android.util.Log.w(this.getClass().getSimpleName(), "Exception creating adapter: " +
+                    ex.getMessage());
+        }
 
     }
 }
