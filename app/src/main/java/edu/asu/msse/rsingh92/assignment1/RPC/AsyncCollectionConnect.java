@@ -1,5 +1,6 @@
 package edu.asu.msse.rsingh92.assignment1.RPC;
 
+import android.nfc.tech.NfcA;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
@@ -11,14 +12,20 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
+import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
+import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 
 public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer, MethodInformation> {
 
+    private static List<PlaceDescription> allPlaces;
+    private static int list_size;
+    private static RPCCallback rpcCallback;
+
     @Override
     protected void onPreExecute(){
-        android.util.Log.d(this.getClass().getSimpleName(),"in onPreExecute on "+
-                (Looper.myLooper() == Looper.getMainLooper()?"Main thread":"Async Thread"));
+        allPlaces = AppUtility.getAllPlacesFromMemory();
     }
 
     @Override
@@ -27,11 +34,14 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
         android.util.Log.d(this.getClass().getSimpleName(),"in doInBackground on "+
                 (Looper.myLooper() == Looper.getMainLooper()?"Main thread":"Async Thread"));
         try {
-            JSONArray ja = new JSONArray(aRequest[0].params);
+            JSONArray ja = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                ja = new JSONArray(aRequest[0].params);
+            }
             android.util.Log.d(this.getClass().getSimpleName(),"params: "+ja.toString());
             String requestData = "{ \"jsonrpc\":\"2.0\", \"method\":\""+aRequest[0].method+"\", \"params\":"+ja.toString()+
                     ",\"id\":3}";
-            android.util.Log.d(this.getClass().getSimpleName(),"requestData: "+requestData+" url: "+aRequest[0].urlString);
+            android.util.Log.d("ENDPOINT","requestData: "+requestData+" url: "+aRequest[0].urlString);
             JsonRPCRequestViaHttp conn = new JsonRPCRequestViaHttp((new URL(aRequest[0].urlString)));
             aRequest[0].resultAsJson = conn.call(requestData);
 
@@ -75,18 +85,32 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
                 }
                 String[] names = al.toArray(new String[0]);
 
-                List<PlaceDescription> places = new ArrayList<>();
+                list_size = names.length;
 
-                for (int i = 0; i < names.length; i++) {
-                    Log.d("SARVANSH",names[i]);
+                allPlaces = AppUtility.getAllPlacesFromMemory();
 
-                    PlaceDescription place = new PlaceDescription();
-                    place.setName(names[i]);
-                    places.add(place);
+//                for (int i = 0; i < names.length; i++) {
+//
+//                    Log.d("WOAH", "onPostExecute: "+ names[i]);
+//
+//                    PlaceDescription place = new PlaceDescription();
+//                    place.setName(names[i]);
+//                    places.add(place);
+//                }
+
+
+
+//                res.callback.resultLoaded(places);
+
+                for(int i=0;i<names.length;i++){
+
+                    Log.d("WOAH", "onPostExecute: "+ names.length);
+
+//                    Log.d("WOAH", "onPostExecute: "+names[i]);
+//
+                    MethodInformation mi = new MethodInformation(res.callback, res.urlString, "get", new String[]{names[i]});
+                    AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
                 }
-
-
-                res.callback.resultLoaded(places);
 
 
 
@@ -109,13 +133,29 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
 //                    }
 //                }
             } else if (res.method.equals("get")) {
-//                JSONObject jo = new JSONObject(res.resultAsJson);
-//
-//                Log.d("SARVANSH",jo.toString());
-//
-////                Student aStud = new Student(jo.getJSONObject("result"));
-////                res.parent.studentidET.setText((new Integer(aStud.studentid)).toString());
-////                res.parent.nameET.setText(aStud.name);
+
+                Log.d("WOAH", "inside");
+
+                JSONObject jo = new JSONObject(res.resultAsJson);
+
+                PlaceDescription place = PlaceLibrary.getPlaceHolderFromJsonObject(jo.getJSONObject("result"));
+                Log.d("PLACENAME", place.toString());
+
+                allPlaces.add(place);
+
+
+                if(allPlaces.size()==list_size){
+                    Log.d("SUCCESS", ""+(res.callback==null));
+                    res.callback.resultLoaded(allPlaces);
+                }
+
+
+
+
+
+//               Student aStud = new Student(jo.getJSONObject("result"));
+//                res.parent.studentidET.setText((new Integer(aStud.studentid)).toString());
+//                res.parent.nameET.setText(aStud.name);
             } else if (res.method.equals("add")){
 //                try{
 //                    // finished adding a student. refresh the list of students by going back to the server for names

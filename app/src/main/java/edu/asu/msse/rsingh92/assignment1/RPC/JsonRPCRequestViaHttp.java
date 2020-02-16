@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-import edu.asu.msse.rsingh92.assignment1.activities.PlaceListActivity;
-
-
 public class JsonRPCRequestViaHttp {
 
     private final Map<String, String> headers;
@@ -22,7 +19,6 @@ public class JsonRPCRequestViaHttp {
 
     public JsonRPCRequestViaHttp(URL url) {
         this.url = url;
-
         this.headers = new HashMap<String, String>();
     }
 

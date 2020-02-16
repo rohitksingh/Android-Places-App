@@ -81,7 +81,7 @@ public class PlaceLibrary {
 
     }
 
-    private static PlaceDescription getPlaceHolderFromJsonObject(JSONObject obj){
+    public static PlaceDescription getPlaceHolderFromJsonObject(JSONObject obj){
 
         PlaceDescription place = new PlaceDescription();
 

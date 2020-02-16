@@ -2,6 +2,7 @@ package edu.asu.msse.rsingh92.assignment1.utilities;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +35,7 @@ public class AppUtility {
     public static String MODIFY_PLACE="AppUtility.MODIFY_PLACE";
     public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
     public static String INDEX = "AppUtility.INDEX";
-    private static List<PlaceDescription> allplaces;
+    private static List<PlaceDescription> allplaces = new ArrayList<>();
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
         ConfirmationDialog confirmationDialog=new ConfirmationDialog((ConfirmationDialogCallback)activity, msg);
