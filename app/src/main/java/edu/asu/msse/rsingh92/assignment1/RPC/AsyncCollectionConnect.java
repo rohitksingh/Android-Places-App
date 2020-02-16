@@ -1,6 +1,5 @@
 package edu.asu.msse.rsingh92.assignment1.RPC;
 
-import android.nfc.tech.NfcA;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
@@ -17,7 +16,7 @@ import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 
-public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer, MethodInformation> {
+public class AsyncCollectionConnect extends AsyncTask<RPCMethodMetadata, Integer, RPCMethodMetadata> {
 
     private static List<PlaceDescription> allPlaces;
     private static int list_size;
@@ -29,7 +28,7 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
     }
 
     @Override
-    protected MethodInformation doInBackground(MethodInformation... aRequest){
+    protected RPCMethodMetadata doInBackground(RPCMethodMetadata... aRequest){
         // array of methods to be called. Assume exactly one input, a single MethodInformation object
         android.util.Log.d(this.getClass().getSimpleName(),"in doInBackground on "+
                 (Looper.myLooper() == Looper.getMainLooper()?"Main thread":"Async Thread"));
@@ -54,7 +53,7 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
     }
 
     @Override
-    protected void onPostExecute(MethodInformation res){
+    protected void onPostExecute(RPCMethodMetadata res){
         /*
          * Using AsyncTask is constraining in the following sense: Either you create a separate Class
          * extending AsyncTask for each call (or method being called), or you must determine which
@@ -108,7 +107,7 @@ public class AsyncCollectionConnect extends AsyncTask<MethodInformation, Integer
 
 //                    Log.d("WOAH", "onPostExecute: "+names[i]);
 //
-                    MethodInformation mi = new MethodInformation(res.callback, res.urlString, "get", new String[]{names[i]});
+                    RPCMethodMetadata mi = new RPCMethodMetadata(res.callback, res.urlString, "get", new String[]{names[i]});
                     AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
                 }
 

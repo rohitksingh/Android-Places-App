@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
-import edu.asu.msse.rsingh92.assignment1.RPC.MethodInformation;
+import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
@@ -142,7 +142,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     private void loadListFromRPC(){
 
         try{
-            MethodInformation mi = new MethodInformation(this, getString(R.string.defaulturl),"getNames",
+            RPCMethodMetadata mi = new RPCMethodMetadata(this, getString(R.string.defaulturl),"getNames",
                     new Object[]{});
             AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
         } catch (Exception ex) {
