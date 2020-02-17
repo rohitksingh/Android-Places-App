@@ -2,6 +2,9 @@ package edu.asu.msse.rsingh92.assignment1.utilities;
 
 import android.content.Context;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,6 +123,38 @@ public class AppUtility {
 
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"remove",
                 new String[]{placeName});
+        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
+        deletePlaceAsyncTask.execute(mi);
+
+    }
+
+    public static void addItem(Context context, PlaceDescription placeDescription) throws JSONException {
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("address-title",placeDescription.getAddressTitle());
+        jsonObject.put("address-street",placeDescription.getAddressStreet());
+        jsonObject.put("elevation",Double.parseDouble(placeDescription.getElevation()));
+        jsonObject.put("latitude",placeDescription.getLatitude());
+        jsonObject.put("longitude",placeDescription.getLongitude());
+        jsonObject.put("image","Image");
+        jsonObject.put("name",placeDescription.getName());
+        jsonObject.put("image",placeDescription.getName());
+        jsonObject.put("description",placeDescription.getDescription());
+        jsonObject.put("category",placeDescription.getCategory());
+
+
+        JSONObject placejson = new JSONObject();
+        placejson.put(placeDescription.getName(), jsonObject);
+
+
+
+//        String name = "{address-title:+""+   "}";
+//
+//        String item ="{\address-title\":\"ASU Software Engineering\",\"address-street\":\"7171 E Sonoran Arroyo Mall$Peralta Hall 230$Mesa AZ 85212\",\"elevation\":1300.0,\"image\":\"asupoly\",\"latitude\":33.306388,\"longitude\":-111.679121,\"name\":\"ASU-Poly\",\"description\":\"Home of ASUs Software Engineering Programs\",\"category\":\"School\"}";
+
+
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
+                new String[]{placejson.toString()});
         DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
         deletePlaceAsyncTask.execute(mi);
 

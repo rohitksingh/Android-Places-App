@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +70,24 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         adapter = new PlaceAdapter(this, allPlaces);
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
+
+
+        PlaceDescription placeDescription = new PlaceDescription();
+        placeDescription.setName("Delhi");
+        placeDescription.setDescription("Desc");
+        placeDescription.setCategory("Hike");
+        placeDescription.setLongitude((double) 98932982);
+        placeDescription.setElevation("989898");
+        placeDescription.setLongitude((double) 873872);
+        placeDescription.setAddressTitle("Address title");
+        placeDescription.setAddressStreet("Address street");
+
+        try {
+            AppUtility.addItem(this, placeDescription);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
