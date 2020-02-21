@@ -40,6 +40,9 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private PlaceDescription currentPlace;
     private int INDEX;
+    private static final int ADD_NEW_PLACE = 9087;
+    private static final int EDIT_PLACE = 9833;
+    private int MODIFY_MODE=ADD_NEW_PLACE;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -49,6 +52,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
         initViews();
+        getModifyMode();
         getDataFromPreviousActivity();
     }
 
@@ -72,7 +76,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         {
 
             case R.id.save:
-                if(getIntent().getAction()!= null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
+                if(MODIFY_MODE==EDIT_PLACE){
                     AppUtility.openConfirmationDialog(this, "Do you want to modify this place");
                 }else{
                     AppUtility.openConfirmationDialog(this, "Do you want to save this place");
@@ -91,9 +95,10 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
      *                                   Private methods
      ***********************************************************************************************/
     private void getDataFromPreviousActivity(){
-        Intent intent = getIntent();
-        if(intent.getAction()!= null && intent.getAction().equals(AppUtility.MODIFY_PLACE)){
+
+        if(MODIFY_MODE==EDIT_PLACE){
             disableNameField();
+            Intent intent = getIntent();
             currentPlace = (PlaceDescription) intent.getSerializableExtra(AppUtility.CURRENT_PLACE);
             INDEX = intent.getIntExtra(AppUtility.INDEX,0);
             setData();
@@ -126,7 +131,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
 
         List<PlaceDescription> allPlace = AppUtility.getAllPlacesFromMemory();
 
-        if(getIntent().getAction()!=null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
+        if(MODIFY_MODE==EDIT_PLACE){
             allPlace.set(INDEX, getPlaceFromView());
         }else {
             allPlace.add(allPlace.size(), getPlaceFromView());
@@ -159,6 +164,12 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
 
     private void disableNameField(){
         name.setEnabled(false);
+    }
+
+    private void getModifyMode(){
+        if(getIntent().getAction()!= null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
+            MODIFY_MODE = EDIT_PLACE;
+        }
     }
 
     @Override
