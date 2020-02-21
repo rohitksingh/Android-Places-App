@@ -35,7 +35,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @version February 2016
  */
-public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCCallback {
+public class ModifyPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private PlaceDescription currentPlace;
@@ -51,8 +51,8 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
-        initViews();
         getModifyMode();
+        initViews();
         getDataFromPreviousActivity();
     }
 
@@ -125,6 +125,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         elevation = findViewById(R.id.elevation);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
+        setAppBarTitle();
     }
 
     private void savePlace(){
@@ -169,6 +170,13 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
     private void getModifyMode(){
         if(getIntent().getAction()!= null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
             MODIFY_MODE = EDIT_PLACE;
+        }
+    }
+
+    private void setAppBarTitle(){
+
+        if(MODIFY_MODE==EDIT_PLACE){
+            getSupportActionBar().setTitle("Edit Place");
         }
     }
 

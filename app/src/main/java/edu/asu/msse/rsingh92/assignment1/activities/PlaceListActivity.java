@@ -135,7 +135,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
      *                                  Private methods
      ***********************************************************************************************/
     private void openAddPlaceActivity(){
-        Intent intent = new Intent(this, AddPlaceActivity.class);
+        Intent intent = new Intent(this, ModifyPlaceActivity.class);
         startActivityForResult(intent, 8090);
     }
 

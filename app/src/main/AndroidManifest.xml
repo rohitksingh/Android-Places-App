@@ -27,7 +27,7 @@
         <activity android:name=".activities.PlaceListActivity">
 
         </activity>
-        <activity android:name=".activities.AddPlaceActivity" android:label="Add Place"/>
+        <activity android:name=".activities.ModifyPlaceActivity" android:label="Add Place"/>
     </application>
 
 </manifest>
