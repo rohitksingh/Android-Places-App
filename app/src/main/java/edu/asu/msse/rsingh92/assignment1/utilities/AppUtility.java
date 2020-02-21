@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.asynctasks.FetchPlaceAsyncTask;
 import edu.asu.msse.rsingh92.assignment1.asynctasks.ModifyPlaceAsyncTask;
-import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
+import edu.asu.msse.rsingh92.assignment1.rpc.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.dialogs.ConfirmationDialog;
@@ -120,12 +120,34 @@ public class AppUtility {
     }
 
 
-    public static void getItem(Context context, String placeName){
+
+    public static void getAllPlacesFromServer(Context context){
+        try{
+            RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl),"getNames",
+                    new Object[]{});
+            FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
+            ac.execute(mi);
+        } catch (Exception ex) {
+            Log.d(TAG, "loadAllPlaces: ");
+        }
+    }
+
+    public static void getPlaceFromServer(Context context, String placeName){
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl), "get", new String[]{placeName});
         FetchPlaceAsyncTask ac = (FetchPlaceAsyncTask) new FetchPlaceAsyncTask(context).execute(mi);
     }
 
-    public static void deleteItem(Context context, String placeName){
+    public static void addPlaceOnServer(Context context, PlaceDescription placeDescription){
+
+        JSONObject jsonObject = getJsonFromPlaceDesc(placeDescription);
+
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
+                new Object[]{jsonObject});
+        ModifyPlaceAsyncTask deletePlaceAsyncTask = new ModifyPlaceAsyncTask();
+        deletePlaceAsyncTask.execute(mi);
+    }
+
+    public static void deletePlaceOnServer(Context context, String placeName){
 
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"remove",
                 new String[]{placeName});
@@ -134,7 +156,8 @@ public class AppUtility {
 
     }
 
-    public static void addItem(Context context, PlaceDescription placeDescription){
+
+    public static JSONObject getJsonFromPlaceDesc(PlaceDescription placeDescription){
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -151,16 +174,12 @@ public class AppUtility {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
-                new Object[]{jsonObject});
-        ModifyPlaceAsyncTask deletePlaceAsyncTask = new ModifyPlaceAsyncTask();
-        deletePlaceAsyncTask.execute(mi);
-
+        
+        return jsonObject;
+        
     }
 
-    public static PlaceDescription getPlaceHolderFromJsonObject(JSONObject obj){
+    public static PlaceDescription getPlaceDescFromJson(JSONObject obj){
 
         PlaceDescription place = new PlaceDescription();
 
@@ -178,21 +197,7 @@ public class AppUtility {
         }catch (JSONException e){
 
         }
-
         return place;
     }
-
-
-    public static void loadAllPlaces(Context context){
-        try{
-            RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl),"getNames",
-                    new Object[]{});
-            FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
-            ac.execute(mi);
-        } catch (Exception ex) {
-            Log.d(TAG, "loadAllPlaces: ");
-        }
-    }
-
 
 }

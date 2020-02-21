@@ -218,7 +218,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         String name = allplaces.get(INDEX).getName();
         allplaces.remove(INDEX);
         setResult(Activity.RESULT_OK);
-        AppUtility.deleteItem(this, name);
+        AppUtility.deletePlaceOnServer(this, name);
         Toast.makeText(this, "Removing "+name, Toast.LENGTH_SHORT).show();
         finish();
 

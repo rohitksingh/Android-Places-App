@@ -50,7 +50,7 @@ public class SplashActivity extends AppCompatActivity implements RPCCallback {
 
 
     private void loadListFromRPC(){
-        AppUtility.loadAllPlaces(this);
+        AppUtility.getAllPlacesFromServer(this);
     }
 
 }

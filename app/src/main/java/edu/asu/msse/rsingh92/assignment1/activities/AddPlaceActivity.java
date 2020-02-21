@@ -134,7 +134,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
 
 
     private void savePlaceOnServer(){
-        AppUtility.addItem(this, getPlaceFromView());
+        AppUtility.addPlaceOnServer(this, getPlaceFromView());
     }
 
 

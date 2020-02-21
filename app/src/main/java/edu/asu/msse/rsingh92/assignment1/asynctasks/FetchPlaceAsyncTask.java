@@ -2,7 +2,6 @@ package edu.asu.msse.rsingh92.assignment1.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,9 +11,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.asu.msse.rsingh92.assignment1.RPC.JsonRPCRequestViaHttp;
-import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
+import edu.asu.msse.rsingh92.assignment1.rpc.JsonRPCRequestViaHttp;
+import edu.asu.msse.rsingh92.assignment1.rpc.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 
@@ -94,22 +92,16 @@ public class FetchPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, R
                 allPlaces = AppUtility.getAllPlacesFromMemory();
 
                 for(int i=0;i<names.length;i++){
-
-
-                    AppUtility.getItem(context, names[i]);
-//                    RPCMethodMetadata mi = new RPCMethodMetadata(res.callback, res.urlString, "get", new String[]{names[i]});
-//                    AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect().execute(mi);
+                    AppUtility.getPlaceFromServer(context, names[i]);
                 }
 
             } else if (res.method.equals("get")) {
 
-
                 JSONObject jo = new JSONObject(res.resultAsJson);
-
-                PlaceDescription place = AppUtility.getPlaceHolderFromJsonObject(jo.getJSONObject("result"));
+                PlaceDescription place = AppUtility.getPlaceDescFromJson(jo.getJSONObject("result"));
 
                 AppUtility.getAllPlacesFromMemory().add(place);
-
+                //Break logic
                 if(allPlaces.size()==list_size){
                     res.callback.resultLoaded(allPlaces);
                 }
@@ -117,7 +109,7 @@ public class FetchPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, R
 
             }
         }catch (Exception ex){
-            android.util.Log.d(this.getClass().getSimpleName(),"Exception: "+ex.getMessage());
+
         }
     }
 

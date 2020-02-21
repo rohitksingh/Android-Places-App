@@ -1,4 +1,4 @@
-package edu.asu.msse.rsingh92.assignment1.RPC;
+package edu.asu.msse.rsingh92.assignment1.rpc;
 
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 
