@@ -89,6 +89,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
     private void getDataFromPreviousActivity(){
         Intent intent = getIntent();
         if(intent.getAction()!= null && intent.getAction().equals(AppUtility.MODIFY_PLACE)){
+            disableNameField();
             currentPlace = (PlaceDescription) intent.getSerializableExtra(AppUtility.CURRENT_PLACE);
             INDEX = intent.getIntExtra(AppUtility.INDEX,0);
             setData();
@@ -152,8 +153,8 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         return newPlace;
     }
 
-    private void modifyPlace(){
-        currentPlace = getPlaceFromView();
+    private void disableNameField(){
+        name.setEnabled(false);
     }
 
     @Override
