@@ -139,7 +139,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
      *                                  Private methods
      ***********************************************************************************************/
     private void openAddActivity(){
-        Intent intent = new Intent(this, AddPlaceActivity.class);
+        Intent intent = new Intent(this, ModifyPlaceActivity.class);
         intent.setAction(AppUtility.MODIFY_PLACE);
         intent.putExtra(AppUtility.CURRENT_PLACE, currentPlace);
         intent.putExtra(AppUtility.INDEX,INDEX);
@@ -218,7 +218,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         String name = allplaces.get(INDEX).getName();
         allplaces.remove(INDEX);
         setResult(Activity.RESULT_OK);
-        AppUtility.deleteItem(this, name);
+        AppUtility.deletePlaceOnServer(this, name);
         Toast.makeText(this, "Removing "+name, Toast.LENGTH_SHORT).show();
         finish();
 

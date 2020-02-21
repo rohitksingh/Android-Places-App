@@ -1,5 +1,6 @@
-package edu.asu.msse.rsingh92.assignment1.callbacks;
+package edu.asu.msse.rsingh92.assignment1.rpc;
 
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -20,9 +21,19 @@ package edu.asu.msse.rsingh92.assignment1.callbacks;
  *
  * @version February 2016
  */
+public class RPCMethodMetadata {
 
-public interface RPCCallback {
+    public String method;
+    public Object[] params;
+    public RPCCallback callback;
+    public String urlString;
+    public String resultAsJson;
 
-    public void resultLoaded(Object object);
-
+    public RPCMethodMetadata(RPCCallback callback, String urlString, String method, Object[] params){
+        this.method = method;
+        this.callback = callback;
+        this.urlString = urlString;
+        this.params = params;
+        this.resultAsJson = "{}";
+    }
 }

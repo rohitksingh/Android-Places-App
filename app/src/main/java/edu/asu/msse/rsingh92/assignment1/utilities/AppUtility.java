@@ -1,6 +1,7 @@
 package edu.asu.msse.rsingh92.assignment1.utilities;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,8 +11,9 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
-import edu.asu.msse.rsingh92.assignment1.RPC.DeletePlaceAsyncTask;
-import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
+import edu.asu.msse.rsingh92.assignment1.asynctasks.FetchPlaceAsyncTask;
+import edu.asu.msse.rsingh92.assignment1.asynctasks.ModifyPlaceAsyncTask;
+import edu.asu.msse.rsingh92.assignment1.rpc.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.dialogs.ConfirmationDialog;
@@ -43,6 +45,8 @@ public class AppUtility {
     public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
     public static String INDEX = "AppUtility.INDEX";
     private static List<PlaceDescription> allplaces = new ArrayList<>();
+
+    private static final String TAG = "AppUtility";
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
         ConfirmationDialog confirmationDialog=new ConfirmationDialog((ConfirmationDialogCallback)activity, msg);
@@ -110,25 +114,50 @@ public class AppUtility {
         return value+" Degree";
     }
 
-//    public static void loadAllPlacesInMemory(Context context){
-//        allplaces = PlaceLibrary.getAllPlacesFronJson(context);
-//    }
 
     public static List<PlaceDescription> getAllPlacesFromMemory(){
         return allplaces;
     }
 
 
-    public static void deleteItem(Context context, String placeName){
+
+    public static void getAllPlacesFromServer(Context context){
+        try{
+            RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl),"getNames",
+                    new Object[]{});
+            FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
+            ac.execute(mi);
+        } catch (Exception ex) {
+            Log.d(TAG, "loadAllPlaces: ");
+        }
+    }
+
+    public static void getPlaceFromServer(Context context, String placeName){
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl), "get", new String[]{placeName});
+        FetchPlaceAsyncTask ac = (FetchPlaceAsyncTask) new FetchPlaceAsyncTask(context).execute(mi);
+    }
+
+    public static void addPlaceOnServer(Context context, PlaceDescription placeDescription){
+
+        JSONObject jsonObject = getJsonFromPlaceDesc(placeDescription);
+
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
+                new Object[]{jsonObject});
+        ModifyPlaceAsyncTask deletePlaceAsyncTask = new ModifyPlaceAsyncTask();
+        deletePlaceAsyncTask.execute(mi);
+    }
+
+    public static void deletePlaceOnServer(Context context, String placeName){
 
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"remove",
                 new String[]{placeName});
-        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
+        ModifyPlaceAsyncTask deletePlaceAsyncTask = new ModifyPlaceAsyncTask();
         deletePlaceAsyncTask.execute(mi);
 
     }
 
-    public static void addItem(Context context, PlaceDescription placeDescription){
+
+    public static JSONObject getJsonFromPlaceDesc(PlaceDescription placeDescription){
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -145,24 +174,30 @@ public class AppUtility {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-//        JSONObject placejson = new JSONObject();
-//        placejson.put(placeDescription.getName(), jsonObject);
-
-
-
-//        String name = "{address-title:+""+   "}";
-//
-//        String item ="{\address-title\":\"ASU Software Engineering\",\"address-street\":\"7171 E Sonoran Arroyo Mall$Peralta Hall 230$Mesa AZ 85212\",\"elevation\":1300.0,\"image\":\"asupoly\",\"latitude\":33.306388,\"longitude\":-111.679121,\"name\":\"ASU-Poly\",\"description\":\"Home of ASUs Software Engineering Programs\",\"category\":\"School\"}";
-
-
-        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
-                new Object[]{jsonObject});
-        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
-        deletePlaceAsyncTask.execute(mi);
-
+        
+        return jsonObject;
+        
     }
 
+    public static PlaceDescription getPlaceDescFromJson(JSONObject obj){
+
+        PlaceDescription place = new PlaceDescription();
+
+        try {
+
+            place.setName(obj.getString("name"));
+            place.setDescription(obj.getString("description"));
+            place.setCategory(obj.getString("category"));
+            place.setAddressTitle(obj.getString("address-title"));
+            place.setAddressStreet(obj.getString("address-street"));
+            place.setElevation(obj.getString("elevation"));
+            place.setLatitude(obj.getDouble("latitude"));
+            place.setLongitude(obj.getDouble("longitude"));
+
+        }catch (JSONException e){
+
+        }
+        return place;
+    }
 
 }

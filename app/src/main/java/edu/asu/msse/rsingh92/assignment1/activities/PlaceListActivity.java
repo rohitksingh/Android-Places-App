@@ -7,23 +7,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
-import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.R;
-import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -140,7 +135,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
      *                                  Private methods
      ***********************************************************************************************/
     private void openAddPlaceActivity(){
-        Intent intent = new Intent(this, AddPlaceActivity.class);
+        Intent intent = new Intent(this, ModifyPlaceActivity.class);
         startActivityForResult(intent, 8090);
     }
 

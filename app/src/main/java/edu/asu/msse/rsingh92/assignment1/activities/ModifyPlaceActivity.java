@@ -3,6 +3,7 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -35,11 +36,14 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @version February 2016
  */
-public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCCallback {
+public class ModifyPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private PlaceDescription currentPlace;
     private int INDEX;
+    private static final int ADD_NEW_PLACE = 9087;
+    private static final int EDIT_PLACE = 9833;
+    private int MODIFY_MODE=ADD_NEW_PLACE;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -48,6 +52,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
+        getModifyMode();
         initViews();
         getDataFromPreviousActivity();
     }
@@ -72,7 +77,15 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         {
 
             case R.id.save:
-                AppUtility.openConfirmationDialog(this, "Do you want to save this place");
+
+                if(ifValadationPassed()){
+                    if(MODIFY_MODE==EDIT_PLACE){
+                        AppUtility.openConfirmationDialog(this, "Do you want to modify this place");
+                    }else{
+                        AppUtility.openConfirmationDialog(this, "Do you want to save this place");
+                    }
+                }
+
                 return true;
 
             default:
@@ -87,9 +100,10 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
      *                                   Private methods
      ***********************************************************************************************/
     private void getDataFromPreviousActivity(){
-        Intent intent = getIntent();
-        if(intent.getAction()!= null && intent.getAction().equals(AppUtility.MODIFY_PLACE)){
+
+        if(MODIFY_MODE==EDIT_PLACE){
             disableNameField();
+            Intent intent = getIntent();
             currentPlace = (PlaceDescription) intent.getSerializableExtra(AppUtility.CURRENT_PLACE);
             INDEX = intent.getIntExtra(AppUtility.INDEX,0);
             setData();
@@ -116,13 +130,14 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         elevation = findViewById(R.id.elevation);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
+        setAppBarTitle();
     }
 
     private void savePlace(){
 
         List<PlaceDescription> allPlace = AppUtility.getAllPlacesFromMemory();
 
-        if(getIntent().getAction()!=null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
+        if(MODIFY_MODE==EDIT_PLACE){
             allPlace.set(INDEX, getPlaceFromView());
         }else {
             allPlace.add(allPlace.size(), getPlaceFromView());
@@ -134,7 +149,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
 
 
     private void savePlaceOnServer(){
-        AppUtility.addItem(this, getPlaceFromView());
+        AppUtility.addPlaceOnServer(this, getPlaceFromView());
     }
 
 
@@ -157,6 +172,19 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         name.setEnabled(false);
     }
 
+    private void getModifyMode(){
+        if(getIntent().getAction()!= null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
+            MODIFY_MODE = EDIT_PLACE;
+        }
+    }
+
+    private void setAppBarTitle(){
+
+        if(MODIFY_MODE==EDIT_PLACE){
+            getSupportActionBar().setTitle("Edit Place");
+        }
+    }
+
     @Override
     public void okButtonClicked() {
         savePlaceOnServer();
@@ -171,5 +199,63 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
     @Override
     public void resultLoaded(Object object) {
 
+    }
+
+
+    private boolean ifValadationPassed(){
+
+        String vName = name.getText().toString().trim();
+        String vDesc = description.getText().toString().trim();
+        String vAddressStreet = addressStreet.getText().toString().trim();
+        String vAddressTitle = addressTitle.getText().toString().trim();
+        String vCategory = category.getText().toString().trim();
+        String vElevation = elevation.getText().toString().trim();
+        String vLongitude = longitude.getText().toString().trim();
+        String vLatitude = latitude.getText().toString().trim();
+
+
+        boolean validationPassed = true;
+
+        if(TextUtils.isEmpty(vName)){
+            name.setError("Name is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vDesc)){
+            description.setError("Description is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vCategory)){
+            category.setError("Category is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vAddressStreet)){
+            addressStreet.setError("Address street is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vAddressTitle)){
+            addressTitle.setError("Address title is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vElevation)){
+            elevation.setError("Elevation is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vLatitude)){
+            latitude.setError("Latitude is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vLongitude)){
+            longitude.setError("Longitude is empty");
+            validationPassed = false;
+        }
+
+        return validationPassed;
     }
 }
