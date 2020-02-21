@@ -14,7 +14,6 @@ import java.util.List;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
-import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -117,7 +116,7 @@ public class AsyncCollectionConnect extends AsyncTask<RPCMethodMetadata, Integer
 
                 JSONObject jo = new JSONObject(res.resultAsJson);
 
-                PlaceDescription place = PlaceLibrary.getPlaceHolderFromJsonObject(jo.getJSONObject("result"));
+                PlaceDescription place = AppUtility.getPlaceHolderFromJsonObject(jo.getJSONObject("result"));
                 Log.d("ADDME", place.getName());
 
 //                allPlaces.add(place);

@@ -147,21 +147,33 @@ public class AppUtility {
         }
 
 
-//        JSONObject placejson = new JSONObject();
-//        placejson.put(placeDescription.getName(), jsonObject);
-
-
-
-//        String name = "{address-title:+""+   "}";
-//
-//        String item ="{\address-title\":\"ASU Software Engineering\",\"address-street\":\"7171 E Sonoran Arroyo Mall$Peralta Hall 230$Mesa AZ 85212\",\"elevation\":1300.0,\"image\":\"asupoly\",\"latitude\":33.306388,\"longitude\":-111.679121,\"name\":\"ASU-Poly\",\"description\":\"Home of ASUs Software Engineering Programs\",\"category\":\"School\"}";
-
-
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
                 new Object[]{jsonObject});
         DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
         deletePlaceAsyncTask.execute(mi);
 
+    }
+
+    public static PlaceDescription getPlaceHolderFromJsonObject(JSONObject obj){
+
+        PlaceDescription place = new PlaceDescription();
+
+        try {
+
+            place.setName(obj.getString("name"));
+            place.setDescription(obj.getString("description"));
+            place.setCategory(obj.getString("category"));
+            place.setAddressTitle(obj.getString("address-title"));
+            place.setAddressStreet(obj.getString("address-street"));
+            place.setElevation(obj.getString("elevation"));
+            place.setLatitude(obj.getDouble("latitude"));
+            place.setLongitude(obj.getDouble("longitude"));
+
+        }catch (JSONException e){
+
+        }
+
+        return place;
     }
 
 
