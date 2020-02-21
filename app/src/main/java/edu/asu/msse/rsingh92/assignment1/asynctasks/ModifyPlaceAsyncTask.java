@@ -8,7 +8,7 @@ import org.json.JSONException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import edu.asu.msse.rsingh92.assignment1.rpc.JsonRPCRequestViaHttp;
+import edu.asu.msse.rsingh92.assignment1.rpc.HttpRPCRequest;
 import edu.asu.msse.rsingh92.assignment1.rpc.RPCMethodMetadata;
 
 /*
@@ -49,14 +49,14 @@ public class ModifyPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, 
         String requestData = "{ \"jsonrpc\":\"2.0\", \"method\":\""+methodInformations[0].method+"\", \"params\":"+ja.toString()+
                 ",\"id\":3}";
 
-        JsonRPCRequestViaHttp conn = null;
+        HttpRPCRequest conn = null;
         try {
-            conn = new JsonRPCRequestViaHttp((new URL(methodInformations[0].urlString)));
+            conn = new HttpRPCRequest((new URL(methodInformations[0].urlString)));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         try {
-            methodInformations[0].resultAsJson = conn.call(requestData);
+            methodInformations[0].resultAsJson = conn.makeRequest(requestData);
         } catch (Exception e) {
             e.printStackTrace();
         }

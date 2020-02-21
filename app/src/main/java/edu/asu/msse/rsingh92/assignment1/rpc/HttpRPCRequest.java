@@ -29,14 +29,14 @@ import java.util.zip.GZIPInputStream;
  *
  * @version February 2016
  */
-public class JsonRPCRequestViaHttp {
+public class HttpRPCRequest {
 
     private final Map<String, String> headers;
     private URL url;
     private String requestData;
 
 
-    public JsonRPCRequestViaHttp(URL url) {
+    public HttpRPCRequest(URL url) {
         this.url = url;
         this.headers = new HashMap<String, String>();
     }
@@ -45,8 +45,8 @@ public class JsonRPCRequestViaHttp {
         this.headers.put(key, value);
     }
 
-    public String call(String requestData) throws Exception {
-        android.util.Log.d(this.getClass().getSimpleName(),"in call, url: "+url.toString()+" requestData: "+requestData);
+    public String makeRequest(String requestData) throws Exception {
+        android.util.Log.d(this.getClass().getSimpleName(),"in makeRequest, url: "+url.toString()+" requestData: "+requestData);
         String respData = post(url, headers, requestData);
         return respData;
     }
@@ -104,4 +104,5 @@ public class JsonRPCRequestViaHttp {
         android.util.Log.d(this.getClass().getSimpleName(),"json rpc request via http returned string "+bos.toString());
         return bos.toString();
     }
+
 }

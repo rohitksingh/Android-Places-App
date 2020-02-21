@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.asu.msse.rsingh92.assignment1.rpc.JsonRPCRequestViaHttp;
+import edu.asu.msse.rsingh92.assignment1.rpc.HttpRPCRequest;
 import edu.asu.msse.rsingh92.assignment1.rpc.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
@@ -62,8 +62,8 @@ public class FetchPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, R
             String requestData = "{ \"jsonrpc\":\"2.0\", \"method\":\""+aRequest[0].method+"\", \"params\":"+ja.toString()+
                     ",\"id\":3}";
 
-            JsonRPCRequestViaHttp conn = new JsonRPCRequestViaHttp((new URL(aRequest[0].urlString)));
-            aRequest[0].resultAsJson = conn.call(requestData);
+            HttpRPCRequest conn = new HttpRPCRequest((new URL(aRequest[0].urlString)));
+            aRequest[0].resultAsJson = conn.makeRequest(requestData);
 
         }catch (Exception ex){
             Log.d(this.getClass().getSimpleName(),"Exception in RPC"+
