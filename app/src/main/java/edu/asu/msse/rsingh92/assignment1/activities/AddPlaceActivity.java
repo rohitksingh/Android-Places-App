@@ -11,6 +11,7 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -34,7 +35,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @version February 2016
  */
-public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback {
+public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private PlaceDescription currentPlace;
@@ -88,6 +89,7 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
     private void getDataFromPreviousActivity(){
         Intent intent = getIntent();
         if(intent.getAction()!= null && intent.getAction().equals(AppUtility.MODIFY_PLACE)){
+            disableNameField();
             currentPlace = (PlaceDescription) intent.getSerializableExtra(AppUtility.CURRENT_PLACE);
             INDEX = intent.getIntExtra(AppUtility.INDEX,0);
             setData();
@@ -123,12 +125,18 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         if(getIntent().getAction()!=null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
             allPlace.set(INDEX, getPlaceFromView());
         }else {
-            allPlace.add(0, getPlaceFromView());
+            allPlace.add(allPlace.size(), getPlaceFromView());
         }
 
         setResult(Activity.RESULT_OK);
         finish();
     }
+
+
+    private void savePlaceOnServer(){
+        AppUtility.addItem(this, getPlaceFromView());
+    }
+
 
     private PlaceDescription getPlaceFromView(){
 
@@ -145,17 +153,23 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         return newPlace;
     }
 
-    private void modifyPlace(){
-        currentPlace = getPlaceFromView();
+    private void disableNameField(){
+        name.setEnabled(false);
     }
 
     @Override
     public void okButtonClicked() {
+        savePlaceOnServer();
         savePlace();
     }
 
     @Override
     public void cancelButtonClicked() {
+
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
 
     }
 }

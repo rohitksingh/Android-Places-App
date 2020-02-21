@@ -7,17 +7,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
+import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.utilities.PlaceLibrary;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -39,7 +45,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  * @version February 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener {
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
@@ -53,13 +59,29 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
-        AppUtility.loadAllPlacesInMemory(this);
+
+
+
+        // initiate request to server to get the names of all students to be placed in the spinner
+
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
-        allPlaces = AppUtility.getAllPlacesFromMemory();//PlaceLibrary.getAllPlacesFronJson(this);
+        allPlaces = AppUtility.getAllPlacesFromMemory();
         adapter = new PlaceAdapter(this, allPlaces);
         placeRecyclerView.setLayoutManager(llm);
         placeRecyclerView.setAdapter(adapter);
+
+
+        PlaceDescription placeDescription = new PlaceDescription();
+        placeDescription.setName("Delhi");
+        placeDescription.setDescription("Desc");
+        placeDescription.setCategory("Hike");
+        placeDescription.setLongitude((double) 98932982);
+        placeDescription.setElevation("989898");
+        placeDescription.setLongitude((double) 873872);
+        placeDescription.setAddressTitle("Address title");
+        placeDescription.setAddressStreet("Address street");
+
     }
 
 
@@ -130,4 +152,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         startActivityForResult(intent,8090);
     }
 
+
+    @Override
+    public void resultLoaded(Object object) {
+
+    }
 }

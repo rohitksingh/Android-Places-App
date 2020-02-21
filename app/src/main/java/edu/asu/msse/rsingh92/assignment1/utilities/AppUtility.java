@@ -2,10 +2,18 @@ package edu.asu.msse.rsingh92.assignment1.utilities;
 
 import android.content.Context;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.RPC.DeletePlaceAsyncTask;
+import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.dialogs.ConfirmationDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 
@@ -34,7 +42,7 @@ public class AppUtility {
     public static String MODIFY_PLACE="AppUtility.MODIFY_PLACE";
     public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
     public static String INDEX = "AppUtility.INDEX";
-    private static List<PlaceDescription> allplaces;
+    private static List<PlaceDescription> allplaces = new ArrayList<>();
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
         ConfirmationDialog confirmationDialog=new ConfirmationDialog((ConfirmationDialogCallback)activity, msg);
@@ -102,12 +110,58 @@ public class AppUtility {
         return value+" Degree";
     }
 
-    public static void loadAllPlacesInMemory(Context context){
-        allplaces = PlaceLibrary.getAllPlacesFronJson(context);
-    }
+//    public static void loadAllPlacesInMemory(Context context){
+//        allplaces = PlaceLibrary.getAllPlacesFronJson(context);
+//    }
 
     public static List<PlaceDescription> getAllPlacesFromMemory(){
         return allplaces;
+    }
+
+
+    public static void deleteItem(Context context, String placeName){
+
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"remove",
+                new String[]{placeName});
+        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
+        deletePlaceAsyncTask.execute(mi);
+
+    }
+
+    public static void addItem(Context context, PlaceDescription placeDescription){
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("address-title",placeDescription.getAddressTitle());
+            jsonObject.put("address-street",placeDescription.getAddressStreet());
+            jsonObject.put("elevation",Double.parseDouble(placeDescription.getElevation()));
+            jsonObject.put("latitude",placeDescription.getLatitude());
+            jsonObject.put("longitude",placeDescription.getLongitude());
+            jsonObject.put("image","Image");
+            jsonObject.put("name",placeDescription.getName());
+            jsonObject.put("image",placeDescription.getName());
+            jsonObject.put("description",placeDescription.getDescription());
+            jsonObject.put("category",placeDescription.getCategory());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+//        JSONObject placejson = new JSONObject();
+//        placejson.put(placeDescription.getName(), jsonObject);
+
+
+
+//        String name = "{address-title:+""+   "}";
+//
+//        String item ="{\address-title\":\"ASU Software Engineering\",\"address-street\":\"7171 E Sonoran Arroyo Mall$Peralta Hall 230$Mesa AZ 85212\",\"elevation\":1300.0,\"image\":\"asupoly\",\"latitude\":33.306388,\"longitude\":-111.679121,\"name\":\"ASU-Poly\",\"description\":\"Home of ASUs Software Engineering Programs\",\"category\":\"School\"}";
+
+
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
+                new Object[]{jsonObject});
+        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
+        deletePlaceAsyncTask.execute(mi);
+
     }
 
 
