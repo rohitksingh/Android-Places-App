@@ -154,7 +154,7 @@ public class AppUtility {
 
 
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
-                new String[]{placejson.toString()});
+                new Object[]{jsonObject});
         DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
         deletePlaceAsyncTask.execute(mi);
 
