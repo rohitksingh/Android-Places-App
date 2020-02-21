@@ -11,8 +11,8 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
-import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
-import edu.asu.msse.rsingh92.assignment1.RPC.DeletePlaceAsyncTask;
+import edu.asu.msse.rsingh92.assignment1.asynctasks.FetchPlaceAsyncTask;
+import edu.asu.msse.rsingh92.assignment1.asynctasks.ModifyPlaceAsyncTask;
 import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
@@ -122,14 +122,14 @@ public class AppUtility {
 
     public static void getItem(Context context, String placeName){
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl), "get", new String[]{placeName});
-        AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect(context).execute(mi);
+        FetchPlaceAsyncTask ac = (FetchPlaceAsyncTask) new FetchPlaceAsyncTask(context).execute(mi);
     }
 
     public static void deleteItem(Context context, String placeName){
 
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"remove",
                 new String[]{placeName});
-        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
+        ModifyPlaceAsyncTask deletePlaceAsyncTask = new ModifyPlaceAsyncTask();
         deletePlaceAsyncTask.execute(mi);
 
     }
@@ -155,7 +155,7 @@ public class AppUtility {
 
         RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback) context, context.getString(R.string.defaulturl),"add",
                 new Object[]{jsonObject});
-        DeletePlaceAsyncTask deletePlaceAsyncTask = new DeletePlaceAsyncTask();
+        ModifyPlaceAsyncTask deletePlaceAsyncTask = new ModifyPlaceAsyncTask();
         deletePlaceAsyncTask.execute(mi);
 
     }
@@ -187,7 +187,7 @@ public class AppUtility {
         try{
             RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl),"getNames",
                     new Object[]{});
-            AsyncCollectionConnect ac = new AsyncCollectionConnect(context);
+            FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
             ac.execute(mi);
         } catch (Exception ex) {
             Log.d(TAG, "loadAllPlaces: ");

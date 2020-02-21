@@ -1,4 +1,4 @@
-package edu.asu.msse.rsingh92.assignment1.RPC;
+package edu.asu.msse.rsingh92.assignment1.asynctasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,6 +8,9 @@ import org.json.JSONException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import edu.asu.msse.rsingh92.assignment1.RPC.JsonRPCRequestViaHttp;
+import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -28,7 +31,7 @@ import java.net.URL;
  *
  * @version February 2016
  */
-public class DeletePlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, RPCMethodMetadata> {
+public class ModifyPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, RPCMethodMetadata> {
 
     private static final String TAG = "DeletePlaceAsyncTask";
 

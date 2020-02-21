@@ -32,7 +32,7 @@ import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
  */
 public class SplashActivity extends AppCompatActivity implements RPCCallback {
 
-    LottieAnimationView lottieAnimationView;
+    private LottieAnimationView lottieAnimationView;
 
     @Override
     public void onCreate(Bundle savesInstanceState){

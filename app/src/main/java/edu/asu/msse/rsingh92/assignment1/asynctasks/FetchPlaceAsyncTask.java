@@ -1,4 +1,4 @@
-package edu.asu.msse.rsingh92.assignment1.RPC;
+package edu.asu.msse.rsingh92.assignment1.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.asu.msse.rsingh92.assignment1.RPC.JsonRPCRequestViaHttp;
+import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
@@ -35,13 +37,13 @@ import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
  *
  * @version February 2016
  */
-public class AsyncCollectionConnect extends AsyncTask<RPCMethodMetadata, Integer, RPCMethodMetadata> {
+public class FetchPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, RPCMethodMetadata> {
 
     private static List<PlaceDescription> allPlaces;
     private static int list_size;
     private Context context;
 
-    public AsyncCollectionConnect(Context context){
+    public FetchPlaceAsyncTask(Context context){
         this.context = context;
     }
 
