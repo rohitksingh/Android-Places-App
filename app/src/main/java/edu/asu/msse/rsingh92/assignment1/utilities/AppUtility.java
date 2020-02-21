@@ -1,6 +1,7 @@
 package edu.asu.msse.rsingh92.assignment1.utilities;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.RPC.AsyncCollectionConnect;
 import edu.asu.msse.rsingh92.assignment1.RPC.DeletePlaceAsyncTask;
 import edu.asu.msse.rsingh92.assignment1.RPC.RPCMethodMetadata;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
@@ -43,6 +45,8 @@ public class AppUtility {
     public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
     public static String INDEX = "AppUtility.INDEX";
     private static List<PlaceDescription> allplaces = new ArrayList<>();
+
+    private static final String TAG = "AppUtility";
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
         ConfirmationDialog confirmationDialog=new ConfirmationDialog((ConfirmationDialogCallback)activity, msg);
@@ -110,14 +114,16 @@ public class AppUtility {
         return value+" Degree";
     }
 
-//    public static void loadAllPlacesInMemory(Context context){
-//        allplaces = PlaceLibrary.getAllPlacesFronJson(context);
-//    }
 
     public static List<PlaceDescription> getAllPlacesFromMemory(){
         return allplaces;
     }
 
+
+    public static void getItem(Context context, String placeName){
+        RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl), "get", new String[]{placeName});
+        AsyncCollectionConnect ac = (AsyncCollectionConnect) new AsyncCollectionConnect(context).execute(mi);
+    }
 
     public static void deleteItem(Context context, String placeName){
 
@@ -174,6 +180,18 @@ public class AppUtility {
         }
 
         return place;
+    }
+
+
+    public static void loadAllPlaces(Context context){
+        try{
+            RPCMethodMetadata mi = new RPCMethodMetadata((RPCCallback)context, context.getString(R.string.defaulturl),"getNames",
+                    new Object[]{});
+            AsyncCollectionConnect ac = new AsyncCollectionConnect(context);
+            ac.execute(mi);
+        } catch (Exception ex) {
+            Log.d(TAG, "loadAllPlaces: ");
+        }
     }
 
 
