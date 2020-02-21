@@ -3,6 +3,7 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -76,11 +77,15 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
         {
 
             case R.id.save:
-                if(MODIFY_MODE==EDIT_PLACE){
-                    AppUtility.openConfirmationDialog(this, "Do you want to modify this place");
-                }else{
-                    AppUtility.openConfirmationDialog(this, "Do you want to save this place");
+
+                if(ifValadationPassed()){
+                    if(MODIFY_MODE==EDIT_PLACE){
+                        AppUtility.openConfirmationDialog(this, "Do you want to modify this place");
+                    }else{
+                        AppUtility.openConfirmationDialog(this, "Do you want to save this place");
+                    }
                 }
+
                 return true;
 
             default:
@@ -194,5 +199,63 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
     @Override
     public void resultLoaded(Object object) {
 
+    }
+
+
+    private boolean ifValadationPassed(){
+
+        String vName = name.getText().toString().trim();
+        String vDesc = description.getText().toString().trim();
+        String vAddressStreet = addressStreet.getText().toString().trim();
+        String vAddressTitle = addressTitle.getText().toString().trim();
+        String vCategory = category.getText().toString().trim();
+        String vElevation = elevation.getText().toString().trim();
+        String vLongitude = longitude.getText().toString().trim();
+        String vLatitude = latitude.getText().toString().trim();
+
+
+        boolean validationPassed = true;
+
+        if(TextUtils.isEmpty(vName)){
+            name.setError("Name is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vDesc)){
+            description.setError("Description is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vCategory)){
+            category.setError("Category is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vAddressStreet)){
+            addressStreet.setError("Address street is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vAddressTitle)){
+            addressTitle.setError("Address title is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vElevation)){
+            elevation.setError("Elevation is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vLatitude)){
+            latitude.setError("Latitude is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vLongitude)){
+            longitude.setError("Longitude is empty");
+            validationPassed = false;
+        }
+
+        return validationPassed;
     }
 }
