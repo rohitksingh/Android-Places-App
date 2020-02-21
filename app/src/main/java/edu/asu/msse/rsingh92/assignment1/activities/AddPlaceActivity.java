@@ -72,7 +72,11 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         {
 
             case R.id.save:
-                AppUtility.openConfirmationDialog(this, "Do you want to save this place");
+                if(getIntent().getAction()!= null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
+                    AppUtility.openConfirmationDialog(this, "Do you want to modify this place");
+                }else{
+                    AppUtility.openConfirmationDialog(this, "Do you want to save this place");
+                }
                 return true;
 
             default:
