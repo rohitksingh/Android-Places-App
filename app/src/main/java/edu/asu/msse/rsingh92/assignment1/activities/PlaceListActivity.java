@@ -82,13 +82,6 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         placeDescription.setAddressTitle("Address title");
         placeDescription.setAddressStreet("Address street");
 
-        try {
-            AppUtility.addItem(this, placeDescription);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
 

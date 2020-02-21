@@ -11,6 +11,7 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -34,7 +35,7 @@ import edu.asu.msse.rsingh92.assignment1.R;
  *
  * @version February 2016
  */
-public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback {
+public class AddPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private PlaceDescription currentPlace;
@@ -123,12 +124,18 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
         if(getIntent().getAction()!=null && getIntent().getAction().equals(AppUtility.MODIFY_PLACE)){
             allPlace.set(INDEX, getPlaceFromView());
         }else {
-            allPlace.add(0, getPlaceFromView());
+            allPlace.add(allPlace.size(), getPlaceFromView());
         }
 
         setResult(Activity.RESULT_OK);
         finish();
     }
+
+
+    private void savePlaceOnServer(){
+        AppUtility.addItem(this, getPlaceFromView());
+    }
+
 
     private PlaceDescription getPlaceFromView(){
 
@@ -151,11 +158,17 @@ public class AddPlaceActivity extends AppCompatActivity implements ConfirmationD
 
     @Override
     public void okButtonClicked() {
+        savePlaceOnServer();
         savePlace();
     }
 
     @Override
     public void cancelButtonClicked() {
+
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
 
     }
 }
