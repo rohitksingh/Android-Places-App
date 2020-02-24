@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -169,7 +171,15 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
     }
 
     private void disableNameField(){
-        name.setEnabled(false);
+        name.setClickable(true);
+        name.setCursorVisible(false);
+        name.setFocusable(false);
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ModifyPlaceActivity.this, "Name field is non editable.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getModifyMode(){
