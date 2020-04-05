@@ -90,12 +90,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-//        cameraPosition = new CameraPosition.Builder()
-//                .target(fromLatLng)
-//                .tilt(0)
-//                .build();
-//
-//        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        cameraPosition = new CameraPosition.Builder()
+                .target(fromLatLng)
+                .build();
+
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
     }
 
