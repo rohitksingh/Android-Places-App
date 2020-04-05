@@ -1,5 +1,6 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,6 +20,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
@@ -63,7 +66,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         markerOptions = new MarkerOptions();
         markerOptions.draggable(true);
-
         addMarker();
 
     }
@@ -84,6 +86,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         markerOptions.position(fromLatLng).title(fromLocation.getName());
         marker = mMap.addMarker(markerOptions);
 
+        drawLine(fromLatLng, toLatLng);
+
+
 
 //        cameraPosition = new CameraPosition.Builder()
 //                .target(fromLatLng)
@@ -100,7 +105,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         toLocation = (PlaceDescription)getIntent().getSerializableExtra(AppUtility.TO_LOCATION);
     }
 
+    private void drawLine(LatLng fromLatLng, LatLng toLatLng){
 
+        Polyline line = mMap.addPolyline(new PolylineOptions()
+                .add(fromLatLng, toLatLng)
+                .width(5)
+                .color(Color.RED));
+
+    }
 
 
 }
