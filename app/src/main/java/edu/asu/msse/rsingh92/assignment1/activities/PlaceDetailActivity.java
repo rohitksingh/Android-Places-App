@@ -57,6 +57,9 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     private int INDEX;
     private boolean is_activity_modified = false;
 
+    private PlaceDescription selectPlace;
+
+
     /***********************************************************************************************
      *                                  Lifecycle methods
      ***********************************************************************************************/
@@ -130,6 +133,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         setDistance(position);
         setBearing(position);
+        selectPlace = otherPlaces.get(position);
     }
 
     @Override
@@ -159,6 +163,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     private void openMapActivity(){
         Log.d("", "openMap: ");
         Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra(AppUtility.FROM_LOCATION, currentPlace);
+        intent.putExtra(AppUtility.TO_LOCATION,selectPlace);
         startActivity(intent);
     }
 
@@ -186,6 +192,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     private void getDataFromIntent(){
         currentPlace = getCurrentPlace();
+        selectPlace = currentPlace;
         otherPlaces = getOtherPlaces();
         INDEX = getIntent().getIntExtra("INDEX",0);
     }

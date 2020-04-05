@@ -44,6 +44,9 @@ public class AppUtility {
     public static String MODIFY_PLACE="AppUtility.MODIFY_PLACE";
     public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
     public static String INDEX = "AppUtility.INDEX";
+    public static String FROM_LOCATION = "AppUtility.FROM_LOCATION";
+    public static String TO_LOCATION = "AppUtility.TO_LOCATION";
+
     private static List<PlaceDescription> allplaces = new ArrayList<>();
 
     private static final String TAG = "AppUtility";

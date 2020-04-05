@@ -22,11 +22,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -36,10 +38,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Marker marker;
     private MarkerOptions markerOptions;
     private CameraPosition cameraPosition;
-    private LatLng initial_location = new LatLng(25.393860, 81.855170);
-
     private static final String TAG = "MapsActivity";
 
+    private PlaceDescription fromLocation;
+    private PlaceDescription toLocation;
 
     private SupportMapFragment mapFragment;
 
@@ -49,8 +51,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        getDataFromIntent();
         mapFragment.getMapAsync(this);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
     }
 
@@ -64,46 +66,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         addMarker();
 
-
-
-//        options.position(point);
-//        options.title("someTitle");
-//        options.snippet("someDesc");
-//        googleMap.addMarker(options);
-
-
-
     }
-
-//    @Override
-//    public void onCameraIdle() {
-//
-////        addMarker();
-//////        try {
-//////            getAddress(mMap.getCameraPosition().target);
-//////        } catch (IOException e) {
-//////            e.printStackTrace();
-//////        }
-//    }
-//
-//    @Override
-//    public void onCameraMove() {
-//
-//    }
-//
-//    @Override
-//    public void onCameraMoveStarted(int i) {
-//
-////        if(marker!=null) {
-////
-////            marker.remove();
-////
-////            if(dummyDot.getVisibility()== View.GONE){
-////                dummyDot.setVisibility(View.VISIBLE);
-////            }
-////        }
-//    }
-
 
     /***********************************************************************************************
      *
@@ -113,78 +76,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void addMarker(){
 
-        LatLng latLng = mMap.getCameraPosition().target;
-        markerOptions.position(latLng);
+        LatLng toLatLng = new LatLng(toLocation.getLatitude(), toLocation.getLongitude());
+        markerOptions.position(toLatLng).title(toLocation.getName());
+        marker = mMap.addMarker(markerOptions);
+
+        LatLng fromLatLng = new LatLng(fromLocation.getLatitude(), fromLocation.getLongitude());
+        markerOptions.position(fromLatLng).title(fromLocation.getName());
         marker = mMap.addMarker(markerOptions);
 
 
-        markerOptions.position(initial_location).title("Deliver Here");
-        marker = mMap.addMarker(markerOptions);
-        cameraPosition = new CameraPosition.Builder()
-                .target(initial_location)
-                .zoom(15)
-                .bearing(90)
-                .tilt(90)
-                .build();
-
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//        cameraPosition = new CameraPosition.Builder()
+//                .target(fromLatLng)
+//                .tilt(0)
+//                .build();
 //
-//        if(dummyDot.getVisibility()!= View.GONE){
-//            dummyDot.setVisibility(View.GONE);
-//        }
+//        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
     }
 
-    private void getAddress(LatLng latLng) throws IOException {
 
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
-
-        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
-        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        String city = addresses.get(0).getLocality();
-        String state = addresses.get(0).getAdminArea();
-        String country = addresses.get(0).getCountryName();
-        String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName();
-
-        Log.d(TAG, "getAddress: "+addresses);
-//        currentLocation.setText(address+", "+city+", "+state+", "+country);
+    private void getDataFromIntent(){
+        fromLocation = (PlaceDescription)getIntent().getSerializableExtra(AppUtility.FROM_LOCATION);
+        toLocation = (PlaceDescription)getIntent().getSerializableExtra(AppUtility.TO_LOCATION);
     }
 
 
-//    private void getCurrentLocation(){
-//
-//        fusedLocationClient.getLastLocation().addOnSuccessListener(this);
-//
-//    }
 
-//    // Success listener when the last loaction is received this method is triggered.
-//    @Override
-//    public void onSuccess(Location location) {
-//
-//        if (location != null) {
-//            try {
-//                currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-//
-//                markerOptions.position(currentLatLng).title("Deliver Here");
-//                marker = mMap.addMarker(markerOptions);
-//                cameraPosition = new CameraPosition.Builder()
-//                        .target(currentLatLng)
-//                        .zoom(15)
-//                        .bearing(90)
-//                        .tilt(90)
-//                        .build();
-//
-//                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//                getAddress(initial_location);
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
+
 }
