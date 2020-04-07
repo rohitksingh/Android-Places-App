@@ -1,17 +1,9 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,12 +14,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -37,7 +23,6 @@ import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationClient;
     private Marker marker;
     private MarkerOptions markerOptions;
     private CameraPosition cameraPosition;
@@ -62,7 +47,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
         markerOptions = new MarkerOptions();
         markerOptions.draggable(true);
@@ -88,10 +72,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         drawLine(fromLatLng, toLatLng);
 
-
-
-
-
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
         cameraPosition = new CameraPosition.Builder()
@@ -116,6 +96,5 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .color(Color.RED));
 
     }
-
 
 }
