@@ -203,4 +203,19 @@ public class AppUtility {
         return place;
     }
 
+    public static PlaceDescription getDummyPlace(){
+
+        PlaceDescription placeDescription = new PlaceDescription();
+        placeDescription.setName("Delhi");
+        placeDescription.setDescription("Delhi is a place");
+        placeDescription.setCategory("Capital");
+        placeDescription.setAddressTitle("Delhi Title");
+        placeDescription.setAddressStreet("Delhi Address street");
+        placeDescription.setElevation(4500+"");
+        placeDescription.setLatitude(273.33);
+        placeDescription.setLongitude(273.11);
+        return placeDescription;
+
+    }
+
 }

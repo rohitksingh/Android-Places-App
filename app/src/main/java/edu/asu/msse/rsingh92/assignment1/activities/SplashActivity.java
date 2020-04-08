@@ -8,6 +8,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
+import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
@@ -41,8 +42,11 @@ public class SplashActivity extends AppCompatActivity implements RPCCallback {
         setContentView(R.layout.activity_splash);
         lottieAnimationView = findViewById(R.id.splash_anim);
         DBUtility.initDatabase(this);
+//        DBUtility.addPlaceToDatabase(AppUtility.getDummyPlace());
+
         DBUtility.getAllPlacesFromDB();
         loadListFromRPC();
+
     }
 
     @Override
