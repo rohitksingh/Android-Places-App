@@ -1,7 +1,10 @@
 package edu.asu.msse.rsingh92.assignment1.utilities;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -122,6 +125,9 @@ public class AppUtility {
         return allplaces;
     }
 
+    public static void setAllPlacesOnMemory(List<PlaceDescription> _allplaces){
+        allplaces = _allplaces;
+    }
 
 
     public static void getAllPlacesFromServer(Context context){
@@ -130,6 +136,9 @@ public class AppUtility {
                     new Object[]{});
             FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
             ac.execute(mi);
+
+            cancelTaskAfter(context, 5000, ac);
+
         } catch (Exception ex) {
             Log.d(TAG, "loadAllPlaces: ");
         }
@@ -216,6 +225,29 @@ public class AppUtility {
         placeDescription.setLongitude(273.11);
         return placeDescription;
 
+    }
+
+    public static void cancelTaskAfter(final Context context, final int milis, final AsyncTask asyncTask){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(milis);
+
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "Server is offline", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
     }
 
 }

@@ -1,9 +1,12 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.airbnb.lottie.LottieAnimationView;
+
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
@@ -44,8 +47,36 @@ public class SplashActivity extends AppCompatActivity implements RPCCallback {
         DBUtility.initDatabase(this);
 //        DBUtility.addPlaceToDatabase(AppUtility.getDummyPlace());
 
-        DBUtility.getAllPlacesFromDB();
-        loadListFromRPC();
+        List<PlaceDescription> allplaces = DBUtility.getAllPlacesFromDB();
+        AppUtility.setAllPlacesOnMemory(allplaces);
+
+
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(Void param){
+                startActivity(new Intent(SplashActivity.this, PlaceListActivity.class));
+                finish();
+            }
+
+        }.execute();
+
+
+
+
+//        loadListFromRPC();
 
     }
 

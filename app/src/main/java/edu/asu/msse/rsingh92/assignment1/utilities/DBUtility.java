@@ -20,6 +20,9 @@ public class DBUtility {
     private static Context context;
 
     public static void initDatabase(Context _context){
+
+        Log.d("AAA", "inside cons");
+
         placeDataBase = new PlaceDataBase(_context);
         context = _context;
         try {
@@ -31,6 +34,8 @@ public class DBUtility {
 
     public static List<PlaceDescription> getAllPlacesFromDB(){
 
+        Log.d("AAA", "inside");
+
         List<PlaceDescription> allPlaces = new ArrayList<>();
 
         String select_all_query = "SELECT * FROM place";
@@ -38,6 +43,8 @@ public class DBUtility {
         c.moveToFirst();
 
         int count = c.getCount();
+
+        Log.d("AAA", count+"");
 
         for(int i=0;i<count;i++){
 
@@ -88,11 +95,13 @@ public class DBUtility {
         contentValues.put("latitude",latitude);
         contentValues.put("longitude",longitude);
 
-//        sqLiteDatabase.close();
-
         long rownum = sqLiteDatabase.insert("place",null,contentValues);
         Log.d("AAA", ""+rownum);
 
+
+    }
+
+    public void deletePlaceonDatabase(){
 
     }
 

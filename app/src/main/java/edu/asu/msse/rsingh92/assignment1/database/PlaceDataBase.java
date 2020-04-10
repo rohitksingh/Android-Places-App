@@ -90,8 +90,6 @@ public class PlaceDataBase extends SQLiteOpenHelper {
                 Log.d(TAG, "checkDB: This file exists");
                 checkDB = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
 
-
-
                 Log.d(TAG, "checkDB: is database null? "+checkDB);
 
                 if (checkDB!=null) {
@@ -152,7 +150,7 @@ public class PlaceDataBase extends SQLiteOpenHelper {
                 ip.close();
             }
         } catch (IOException e) {
-            android.util.Log.w("CourseDB --> copyDB", "IOException: "+e.getMessage());
+            Log.d(TAG, "copyDB: "+e.getMessage());
         }
     }
 
