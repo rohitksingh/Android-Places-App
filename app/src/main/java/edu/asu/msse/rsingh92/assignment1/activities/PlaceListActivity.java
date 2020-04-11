@@ -1,11 +1,13 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -124,6 +127,10 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
                 openAddPlaceActivity();
                 return true;
 
+            case R.id.sync:
+                syncWithServer(this);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -150,6 +157,20 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
     @Override
     public void resultLoaded(Object object) {
+        Toast.makeText(this, "Synced", Toast.LENGTH_SHORT).show();
+        allPlaces = AppUtility.getAllPlacesFromMemory();
 
+        DBUtility.deleteAllPlacesOnDatabase();
+        DBUtility.addAllPlacesToDatabase(allPlaces);
+
+        adapter = new PlaceAdapter(this,allPlaces);
+        placeRecyclerView.setAdapter(adapter);
+
+
+
+    }
+
+    public void syncWithServer(Context context){
+        AppUtility.getAllPlacesFromServer(context);
     }
 }

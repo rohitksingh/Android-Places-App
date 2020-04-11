@@ -125,6 +125,10 @@ public class AppUtility {
         return allplaces;
     }
 
+    public static List<PlaceDescription> dropAppPlacesOnMemory(){
+        return allplaces = new ArrayList<>();
+    }
+
     public static void setAllPlacesOnMemory(List<PlaceDescription> _allplaces){
         allplaces = _allplaces;
     }
@@ -137,7 +141,7 @@ public class AppUtility {
             FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
             ac.execute(mi);
 
-            cancelTaskAfter(context, 5000, ac);
+//            cancelTaskAfter(context, 5000, ac);
 
         } catch (Exception ex) {
             Log.d(TAG, "loadAllPlaces: ");
@@ -249,5 +253,10 @@ public class AppUtility {
             }
         }).start();
     }
+
+    public static void syncWithServer(){
+
+    }
+
 
 }

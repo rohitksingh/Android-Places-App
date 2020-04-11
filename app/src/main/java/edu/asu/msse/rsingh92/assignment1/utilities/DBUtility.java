@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.airbnb.lottie.L;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class DBUtility {
     private static PlaceDataBase placeDataBase;
     private static SQLiteDatabase sqLiteDatabase;
     private static Context context;
+    private static List<PlaceDescription> nonSyncedPlaces;
 
     public static void initDatabase(Context _context){
 
@@ -70,6 +73,12 @@ public class DBUtility {
 
     }
 
+    public static void addAllPlacesToDatabase(List<PlaceDescription> places){
+        for(PlaceDescription place:places){
+            addPlaceToDatabase(place);
+        }
+    }
+
     public static void addPlaceToDatabase(PlaceDescription place){
 
         String name = place.getName();
@@ -101,8 +110,23 @@ public class DBUtility {
 
     }
 
-    public void deletePlaceonDatabase(){
+    public static int deleteAllPlacesOnDatabase(){
+        return sqLiteDatabase.delete("place", "1", null);
+    }
 
+    /**
+     *   Methods which deal with places that could not be pused to Server
+     */
+    public static List<PlaceDescription> getAllNonSyncedPlaces(){
+        return nonSyncedPlaces;
+    }
+
+    public static void addInNonSynedPlaces(PlaceDescription nonSyncPlace){
+        nonSyncedPlaces.add(nonSyncPlace);
+    }
+
+    public static void resetNonSyncPlace(){
+        nonSyncedPlaces = new ArrayList<PlaceDescription>();
     }
 
 }

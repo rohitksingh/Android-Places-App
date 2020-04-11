@@ -89,7 +89,7 @@ public class FetchPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, R
 
                 list_size = names.length;
 
-                allPlaces = AppUtility.getAllPlacesFromMemory();
+                allPlaces = AppUtility.dropAppPlacesOnMemory();
 
                 for(int i=0;i<names.length;i++){
                     AppUtility.getPlaceFromServer(context, names[i]);
