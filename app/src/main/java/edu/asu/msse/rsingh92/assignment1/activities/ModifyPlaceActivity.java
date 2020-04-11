@@ -18,6 +18,7 @@ import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -150,6 +151,9 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
     }
 
 
+    private void savePlaceOnDataBase(){
+        DBUtility.addPlaceToDatabase(getPlaceFromView());
+    }
     private void savePlaceOnServer(){
         AppUtility.addPlaceOnServer(this, getPlaceFromView());
     }
@@ -198,6 +202,7 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
     @Override
     public void okButtonClicked() {
         savePlaceOnServer();
+        savePlaceOnDataBase();
         savePlace();
     }
 

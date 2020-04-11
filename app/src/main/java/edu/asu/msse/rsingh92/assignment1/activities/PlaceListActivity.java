@@ -166,8 +166,6 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         adapter = new PlaceAdapter(this,allPlaces);
         placeRecyclerView.setAdapter(adapter);
 
-
-
     }
 
     public void syncWithServer(Context context){
