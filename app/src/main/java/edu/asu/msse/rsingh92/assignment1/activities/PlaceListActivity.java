@@ -15,6 +15,7 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
@@ -43,12 +44,14 @@ import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
  * @version February 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback {
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback , SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
     private PlaceAdapter adapter;
     private List<PlaceDescription> allPlaces;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -61,6 +64,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
 
         // initiate request to server to get the names of all students to be placed in the spinner
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
@@ -127,8 +133,13 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
                 openAddPlaceActivity();
                 return true;
 
-            case R.id.sync:
+            case R.id.menu_refresh:
+
+
+                swipeRefreshLayout.setRefreshing(true);
+
                 syncWithServer(this);
+
                 return true;
 
             default:
@@ -158,6 +169,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     @Override
     public void resultLoaded(Object object) {
         Toast.makeText(this, "Synced", Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
         allPlaces = AppUtility.getAllPlacesFromMemory();
 
         DBUtility.deleteAllPlacesOnDatabase();
@@ -169,6 +181,12 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     }
 
     public void syncWithServer(Context context){
+        Log.d("HAHA", "syncWithServer: ");
         AppUtility.getAllPlacesFromServer(context);
+    }
+
+    @Override
+    public void onRefresh() {
+        syncWithServer(this);
     }
 }
