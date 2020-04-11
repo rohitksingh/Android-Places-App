@@ -10,6 +10,7 @@ import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
 import android.util.Log;
 import android.view.Menu;
@@ -244,11 +245,22 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         String name = allplaces.get(INDEX).getName();
         allplaces.remove(INDEX);
         setResult(Activity.RESULT_OK);
-        AppUtility.deletePlaceOnServer(this, name);
+        deletePlaceOnserver(name);
+        deletePlaceOnDatabase(name);
         Toast.makeText(this, "Removing "+name, Toast.LENGTH_SHORT).show();
         finish();
 
     }
+
+    private void deletePlaceOnserver(String name){
+        AppUtility.deletePlaceOnServer(this, name);
+    }
+
+    private void deletePlaceOnDatabase(String name){
+        DBUtility.deletePlaceOnDataBase(name);
+    }
+
+
 
 
     @Override

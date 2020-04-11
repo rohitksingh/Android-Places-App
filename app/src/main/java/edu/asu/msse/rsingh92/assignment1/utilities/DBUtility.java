@@ -114,6 +114,13 @@ public class DBUtility {
         return sqLiteDatabase.delete("place", "1", null);
     }
 
+    public static void deletePlaceOnDataBase(String placeName){
+        String table = "place";
+        String whereClause = "name=?";
+        String[] whereArgs = new String[] { String.valueOf(placeName) };
+        sqLiteDatabase.delete(table, whereClause, whereArgs);
+    }
+
     /**
      *   Methods which deal with places that could not be pused to Server
      */
