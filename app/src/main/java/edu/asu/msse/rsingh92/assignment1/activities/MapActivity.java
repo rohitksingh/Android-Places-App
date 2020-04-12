@@ -70,16 +70,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         markerOptions.position(fromLatLng).title(fromLocation.getName());
         marker = mMap.addMarker(markerOptions);
 
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo(21));
+
         drawLine(fromLatLng, toLatLng);
 
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+//        mMap.getUiSettings().setZoomControlsEnabled(true);
+
 
         cameraPosition = new CameraPosition.Builder()
-                .target(fromLatLng)
+                .target(getMiddleLatLng(fromLatLng, toLatLng))
+                .zoom(getZoomLevel(AppUtility.getDistance(fromLocation, toLocation)))
                 .build();
 
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+
+
+    }
+
+
+    private int getZoomLevel(Double distance){
+        if(distance<100){
+            return 10;
+        }else{
+            return 2;
+        }
+    }
+
+    private LatLng getMiddleLatLng(LatLng fromLatLng, LatLng toLatLng){
+        double midLat = (fromLatLng.latitude+toLatLng.latitude)/2;
+        double midLng = (fromLatLng.longitude+toLatLng.longitude)/2;
+        return new LatLng(midLat, midLng);
     }
 
 
