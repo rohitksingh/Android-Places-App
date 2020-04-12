@@ -2,6 +2,8 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,10 +19,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.dialogs.AddPlaceDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
     private Marker marker;
@@ -48,6 +51,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMapClickListener(this);
         markerOptions = new MarkerOptions();
         markerOptions.draggable(true);
         addMarker();
@@ -70,12 +74,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         markerOptions.position(fromLatLng).title(fromLocation.getName());
         marker = mMap.addMarker(markerOptions);
 
-//        mMap.animateCamera(CameraUpdateFactory.zoomTo(21));
-
         drawLine(fromLatLng, toLatLng);
-
-//        mMap.getUiSettings().setZoomControlsEnabled(true);
-
 
         cameraPosition = new CameraPosition.Builder()
                 .target(getMiddleLatLng(fromLatLng, toLatLng))
@@ -83,7 +82,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .build();
 
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
 
 
     }
@@ -117,5 +115,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .color(Color.RED));
 
     }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        Log.d("DONE", latLng.toString());
+
+        markerOptions.position(latLng).title("New Place");
+        marker = mMap.addMarker(markerOptions);
+
+        PlaceDescription placeDescription = new PlaceDescription();
+        placeDescription.setLatitude(latLng.latitude);
+        placeDescription.setLongitude(latLng.longitude);
+
+        AddPlaceDialog mydialog = new AddPlaceDialog(this, placeDescription);
+        mydialog.show();
+
+    }
+
+
+
+
+
+
 
 }
