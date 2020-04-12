@@ -61,13 +61,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
 
-
-
         // initiate request to server to get the names of all students to be placed in the spinner
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
-        swipeRefreshLayout.setOnRefreshListener(this);
-
+        setupSwipeTorefesh();
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
         allPlaces = AppUtility.getAllPlacesFromMemory();
@@ -188,5 +184,16 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     @Override
     public void onRefresh() {
         syncWithServer(this);
+    }
+
+    public void setupSwipeTorefesh(){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
     }
 }
