@@ -1,5 +1,6 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,15 +18,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.YesNoCallback;
 import edu.asu.msse.rsingh92.assignment1.dialogs.AddPlaceDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
+import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, YesNoCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, YesNoCallback, RPCCallback {
 
     private GoogleMap mMap;
     private Marker marker;
@@ -39,6 +44,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private SupportMapFragment mapFragment;
 
     private AddPlaceDialog addPlaceDialog;
+
+    private boolean ifNewPlaceAdded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,29 +137,69 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //
 //        drawMarker(latLng);
 
+//        drawMarkeronMap(latLng);
+
         addPlaceDialog = new AddPlaceDialog(this, placeDescription);
         addPlaceDialog.setCancelable(false);
         addPlaceDialog.show();
 
     }
 
-    private void drawMarker(LatLng latLng){
+    private void drawMarkeronMap(LatLng latLng){
         Log.d("DONE", latLng.toString());
         markerOptions.position(latLng).title("New Place");
         marker = mMap.addMarker(markerOptions);
         Toast.makeText(this, "Place Added", Toast.LENGTH_SHORT).show();
-        addPlaceDialog.dismiss();
+//        addPlaceDialog.dismiss();
     }
 
     @Override
     public void yesClicked(Object object) {
         PlaceDescription place = (PlaceDescription)object;
-        drawMarker(new LatLng(place.getLatitude(), place.getLatitude()));
+        LatLng latLng = new LatLng(place.getLatitude(), place.getLatitude());
+
+        drawMarkeronMap(latLng);
+        addPlace(place);
+
+        addPlaceDialog.dismiss();
 
     }
 
     @Override
     public void noClicked(Object object) {
         addPlaceDialog.dismiss();
+    }
+
+    private void addPlace(PlaceDescription place){
+        addPlaceOnList(place);
+        addPlaceOnServer(place);
+        addPlaceOnDataBase(place);
+        ifNewPlaceAdded = true;
+    }
+
+    private void addPlaceOnList(PlaceDescription place){
+        List<PlaceDescription>  places = AppUtility.getAllPlacesFromMemory();
+        places.add(places.size(), place);
+    }
+
+    private void addPlaceOnDataBase(PlaceDescription place){
+        AppUtility.addPlaceOnServer(this, place);
+    }
+
+    private void addPlaceOnServer(PlaceDescription place){
+        DBUtility.addPlaceToDatabase(place);
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
+
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(ifNewPlaceAdded){
+            setResult(Activity.RESULT_OK);
+        }
+        super.onBackPressed();
     }
 }

@@ -16,7 +16,7 @@ import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 public class AddPlaceDialog extends Dialog {
 
 
-    private EditText name, desc, category, latitude, longitude;
+    private EditText name, desc, category, elevation, latitude, longitude;
     private Button save, cancel;
     private PlaceDescription place;
     private YesNoCallback callback;
@@ -32,6 +32,7 @@ public class AddPlaceDialog extends Dialog {
         setContentView(R.layout.dialog_add_place);
         name = findViewById(R.id.name);
         desc = findViewById(R.id.desc);
+        elevation = findViewById(R.id.elevation);
         category = findViewById(R.id.category);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
@@ -67,7 +68,7 @@ public class AddPlaceDialog extends Dialog {
         place.setName(name.getText().toString());
         place.setDescription(desc.getText().toString());
         place.setCategory(category.getText().toString());
-
+        place.setElevation(elevation.getText().toString());
         return place;
     }
 

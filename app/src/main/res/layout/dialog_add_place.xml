@@ -47,11 +47,27 @@
         style="@style/EditTextWrapperStyle"
         >
         <EditText
+            android:id="@+id/elevation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Elevation"
+            style="@style/EditTextStyle"
+            android:inputType="numberSigned"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/EditTextWrapperStyle"
+        >
+        <EditText
             android:id="@+id/latitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Latitude"
-            style="@style/EditTextStyle"/>
+            style="@style/EditTextStyle"
+            android:inputType="numberSigned"
+            />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -63,7 +79,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Longitude"
-            style="@style/EditTextStyle"/>
+            style="@style/EditTextStyle"
+            android:inputType="numberSigned"/>
     </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         android:layout_width="match_parent"

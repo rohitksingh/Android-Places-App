@@ -82,7 +82,10 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
             currentPlace = AppUtility.getAllPlacesFromMemory().get(INDEX);
             setDataToViews();
             is_activity_modified = true;
+        }else if(req==9999 && res == Activity.RESULT_OK){
+            is_activity_modified = true;
         }
+
     }
 
     @Override
@@ -166,7 +169,9 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(AppUtility.FROM_LOCATION, currentPlace);
         intent.putExtra(AppUtility.TO_LOCATION,selectPlace);
-        startActivity(intent);
+//        startActivity(intent);
+        startActivityForResult(intent, 9999);
+
     }
 
     private void setDistance(int position){
