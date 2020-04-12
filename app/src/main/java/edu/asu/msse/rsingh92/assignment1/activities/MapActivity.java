@@ -19,11 +19,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.YesNoCallback;
 import edu.asu.msse.rsingh92.assignment1.dialogs.AddPlaceDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, YesNoCallback {
 
     private GoogleMap mMap;
     private Marker marker;
@@ -35,6 +37,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private PlaceDescription toLocation;
 
     private SupportMapFragment mapFragment;
+
+    private AddPlaceDialog addPlaceDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,24 +122,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.d("DONE", latLng.toString());
 
-        markerOptions.position(latLng).title("New Place");
-        marker = mMap.addMarker(markerOptions);
 
         PlaceDescription placeDescription = new PlaceDescription();
         placeDescription.setLatitude(latLng.latitude);
         placeDescription.setLongitude(latLng.longitude);
+//
+//        drawMarker(latLng);
 
-        AddPlaceDialog mydialog = new AddPlaceDialog(this, placeDescription);
-        mydialog.show();
+        addPlaceDialog = new AddPlaceDialog(this, placeDescription);
+        addPlaceDialog.setCancelable(false);
+        addPlaceDialog.show();
 
     }
 
+    private void drawMarker(LatLng latLng){
+        Log.d("DONE", latLng.toString());
+        markerOptions.position(latLng).title("New Place");
+        marker = mMap.addMarker(markerOptions);
+        Toast.makeText(this, "Place Added", Toast.LENGTH_SHORT).show();
+        addPlaceDialog.dismiss();
+    }
 
+    @Override
+    public void yesClicked(Object object) {
+        PlaceDescription place = (PlaceDescription)object;
+        drawMarker(new LatLng(place.getLatitude(), place.getLatitude()));
 
+    }
 
-
-
-
+    @Override
+    public void noClicked(Object object) {
+        addPlaceDialog.dismiss();
+    }
 }
