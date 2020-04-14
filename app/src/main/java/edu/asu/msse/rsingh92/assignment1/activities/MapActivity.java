@@ -1,12 +1,12 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,15 +22,13 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
-import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.YesNoCallback;
-import edu.asu.msse.rsingh92.assignment1.dialogs.AddPlaceDialog;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, YesNoCallback, RPCCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, RPCCallback {
 
     private GoogleMap mMap;
     private Marker marker;
@@ -43,9 +41,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private SupportMapFragment mapFragment;
 
-    private AddPlaceDialog addPlaceDialog;
-
     private boolean ifNewPlaceAdded = false;
+
+    public static final int MODIFY_PLACE_REQ = 9099;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,10 +97,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private int getZoomLevel(Double distance){
-        if(distance<100){
-            return 10;
-        }else{
-            return 2;
+
+        if(distance<1){
+            return 20;
+        }
+        else if(distance<40 && distance>=1){
+            return 12;
+        }else if(distance>=40 && distance<=100){
+            return 9;
+        }else if(distance>100 && distance<=4000){
+            return 5;
+        }
+        else{
+            return 1;
         }
     }
 
@@ -131,18 +138,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapClick(LatLng latLng) {
 
 
+        Log.d("DONE", "onMapClick: "+latLng.toString());
         PlaceDescription placeDescription = new PlaceDescription();
         placeDescription.setLatitude(latLng.latitude);
         placeDescription.setLongitude(latLng.longitude);
-//
-//        drawMarker(latLng);
 
-//        drawMarkeronMap(latLng);
+        Intent fillPlaceInfoIntent = new Intent(this, CreatePlaceOnTouchActivity.class);
+        fillPlaceInfoIntent.putExtra(AppUtility.MODIFY_PLACE, placeDescription);
+        startActivityForResult(fillPlaceInfoIntent, MODIFY_PLACE_REQ);
 
-        addPlaceDialog = new AddPlaceDialog(this, placeDescription);
-        addPlaceDialog.setCancelable(false);
-        addPlaceDialog.show();
+    }
 
+
+    @Override
+    public void onActivityResult(int req, int res, Intent data){
+
+        if(req == MODIFY_PLACE_REQ){
+            if(res == Activity.RESULT_OK){
+
+                PlaceDescription placeAdded = (PlaceDescription)data.getSerializableExtra(AppUtility.MODIFY_PLACE);
+                LatLng latLng = new LatLng(placeAdded.getLatitude(), placeAdded.getLongitude());
+                drawMarkeronMap(latLng);
+                addPlace(placeAdded);
+
+            }else {
+
+            }
+        }
     }
 
     private void drawMarkeronMap(LatLng latLng){
@@ -150,25 +172,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         markerOptions.position(latLng).title("New Place");
         marker = mMap.addMarker(markerOptions);
         Toast.makeText(this, "Place Added", Toast.LENGTH_SHORT).show();
-//        addPlaceDialog.dismiss();
     }
 
-    @Override
-    public void yesClicked(Object object) {
-        PlaceDescription place = (PlaceDescription)object;
-        LatLng latLng = new LatLng(place.getLatitude(), place.getLatitude());
-
-        drawMarkeronMap(latLng);
-        addPlace(place);
-
-        addPlaceDialog.dismiss();
-
-    }
-
-    @Override
-    public void noClicked(Object object) {
-        addPlaceDialog.dismiss();
-    }
 
     private void addPlace(PlaceDescription place){
         addPlaceOnList(place);

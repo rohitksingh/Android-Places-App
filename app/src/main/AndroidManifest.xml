@@ -27,6 +27,7 @@
             android:label="Map"/>
         <activity android:name=".activities.PlaceListActivity"/>
         <activity android:name=".activities.ModifyPlaceActivity" android:label="Add Place"/>
+        <activity android:name=".activities.CreatePlaceOnTouchActivity" android:label="Fill Place Info"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
