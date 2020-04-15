@@ -164,15 +164,23 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
     @Override
     public void resultLoaded(Object object) {
-        Toast.makeText(this, "Synced", Toast.LENGTH_SHORT).show();
+
+        if(object!=null){
+            Toast.makeText(this, "Synced", Toast.LENGTH_SHORT).show();
+
+            allPlaces = AppUtility.getAllPlacesFromMemory();
+
+            DBUtility.deleteAllPlacesOnDatabase();
+            DBUtility.addAllPlacesToDatabase(allPlaces);
+
+            adapter = new PlaceAdapter(this,allPlaces);
+            placeRecyclerView.setAdapter(adapter);
+        }else {
+            Toast.makeText(PlaceListActivity.this, "Server is offline", Toast.LENGTH_SHORT).show();
+        }
+
         swipeRefreshLayout.setRefreshing(false);
-        allPlaces = AppUtility.getAllPlacesFromMemory();
 
-        DBUtility.deleteAllPlacesOnDatabase();
-        DBUtility.addAllPlacesToDatabase(allPlaces);
-
-        adapter = new PlaceAdapter(this,allPlaces);
-        placeRecyclerView.setAdapter(adapter);
 
     }
 

@@ -65,15 +65,22 @@ public class FetchPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, R
             HttpRPCRequest conn = new HttpRPCRequest((new URL(aRequest[0].urlString)));
             aRequest[0].resultAsJson = conn.makeRequest(requestData);
 
+            Log.d("ASYNCCANCEL", "doInBackground: "+this.getStatus());
+
         }catch (Exception ex){
+
             Log.d(this.getClass().getSimpleName(),"Exception in RPC"+
                     ex.getMessage());
+            Log.d("ASYNCCANCEL", "exception: "+this.getStatus());
+            Log.d("ASYNCCANCEL", "Reached here "+ex.getMessage());
         }
         return aRequest[0];
     }
 
     @Override
     protected void onPostExecute(RPCMethodMetadata res){
+
+        Log.d("ASYNCCANCEL", "onPostExecute: ");
 
         try {
             if (res.method.equals("getNames")) {
@@ -109,7 +116,8 @@ public class FetchPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, R
 
             }
         }catch (Exception ex){
-
+            Log.d("ASYNCCANCEL", "onPostExecute: final"+ex.getMessage());
+            res.callback.resultLoaded(null);
         }
     }
 

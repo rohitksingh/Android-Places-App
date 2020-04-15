@@ -141,7 +141,8 @@ public class AppUtility {
             FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
             ac.execute(mi);
 
-//            cancelTaskAfter(context, 5000, ac);
+            Log.d("ASYNCCANCEL", "getAllPlacesFromServer: "+ac.getStatus().name());
+
 
         } catch (Exception ex) {
             Log.d(TAG, "loadAllPlaces: ");
@@ -230,33 +231,5 @@ public class AppUtility {
         return placeDescription;
 
     }
-
-    public static void cancelTaskAfter(final Context context, final int milis, final AsyncTask asyncTask){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(milis);
-
-                    ((Activity)context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(context, "Server is offline", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }).start();
-    }
-
-    public static void syncWithServer(){
-
-    }
-
 
 }
