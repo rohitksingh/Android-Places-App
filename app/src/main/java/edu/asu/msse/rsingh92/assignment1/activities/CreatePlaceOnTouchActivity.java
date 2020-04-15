@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -89,7 +90,9 @@ public class CreatePlaceOnTouchActivity extends AppCompatActivity implements Vie
         switch (v.getId()){
 
             case R.id.save:
-                sendPlaceData();
+                if(ifValadationPassed()){
+                    sendPlaceData();
+                }
                 break;
 
             case R.id.cancel:
@@ -113,5 +116,62 @@ public class CreatePlaceOnTouchActivity extends AppCompatActivity implements Vie
     private void dontSendPlaceData(){
         setResult(Activity.RESULT_CANCELED);
         finish();
+    }
+
+    private boolean ifValadationPassed(){
+
+        String vName = name.getText().toString().trim();
+        String vDesc = desc.getText().toString().trim();
+        String vAddressStreet = streetAddress.getText().toString().trim();
+        String vAddressTitle = streetTitle.getText().toString().trim();
+        String vCategory = category.getText().toString().trim();
+        String vElevation = elevation.getText().toString().trim();
+        String vLongitude = longitude.getText().toString().trim();
+        String vLatitude = latitude.getText().toString().trim();
+
+
+        boolean validationPassed = true;
+
+        if(TextUtils.isEmpty(vName)){
+            name.setError("Name is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vDesc)){
+            desc.setError("Description is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vCategory)){
+            category.setError("Category is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vAddressStreet)){
+            streetAddress.setError("Address street is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vAddressTitle)){
+            streetTitle.setError("Address title is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vElevation)){
+            elevation.setError("Elevation is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vLatitude)){
+            latitude.setError("Latitude is empty");
+            validationPassed = false;
+        }
+
+        if(TextUtils.isEmpty(vLongitude)){
+            longitude.setError("Longitude is empty");
+            validationPassed = false;
+        }
+
+        return validationPassed;
     }
 }
