@@ -4,69 +4,70 @@
     android:layout_height="match_parent"
     >
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:padding="20dp"
         >
+        <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/EditTextWrapperStyle"
+        >
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            style="@style/EditTextStyle"/>
+    </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/EditTextWrapperStyle"
             >
             <EditText
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Name"
-                style="@style/NonEditTextStyle"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/EditTextWrapperStyle">
-            <EditText
-                android:id="@+id/description"
+                android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Description"
-                style="@style/NonEditTextStyle"/>
+                style="@style/EditTextStyle"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/EditTextWrapperStyle">
+            style="@style/EditTextWrapperStyle"
+            >
             <EditText
                 android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Category"
-                style="@style/NonEditTextStyle"/>
+                style="@style/EditTextStyle"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/EditTextWrapperStyle">
+            style="@style/EditTextWrapperStyle"
+            >
             <EditText
-                android:id="@+id/addressTitle"
+                android:id="@+id/streetTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Address Title"
-                style="@style/NonEditTextStyle"/>
+                android:hint="Street Title"
+                style="@style/EditTextStyle"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/EditTextWrapperStyle">
+            style="@style/EditTextWrapperStyle"
+            >
             <EditText
-                android:id="@+id/addressStreet"
+                android:id="@+id/streetAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Address Street"
-                style="@style/NonEditTextStyle"/>
+                android:hint="Street Address"
+                style="@style/EditTextStyle"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -78,79 +79,61 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Elevation"
+                style="@style/EditTextStyle"
                 android:inputType="numberSigned"
-                style="@style/NonEditTextStyle"/>
+                />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/EditTextWrapperStyle">
+            style="@style/EditTextWrapperStyle"
+            >
             <EditText
                 android:id="@+id/latitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Latitude"
+                style="@style/EditTextStyle"
                 android:inputType="numberSigned"
-                style="@style/NonEditTextStyle"/>
+                />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/EditTextWrapperStyle">
+            style="@style/EditTextWrapperStyle"
+            >
             <EditText
                 android:id="@+id/longitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Longitude"
-                android:inputType="numberSigned"
-                style="@style/NonEditTextStyle"
-                />
+                style="@style/EditTextStyle"
+                android:inputType="numberSigned"/>
         </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp"
+            android:gravity="center"
             >
-            <TextView
-                android:id="@+id/distance"
+            <Button
+                android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Distance"
-                android:layout_weight="1"
-                android:textColor="@color/colorPrimary"
-                android:gravity="center"
+                android:text="Save"
+                android:background="@color/colorPrimary"
+                android:textColor="#ffffff"
                 />
-            <TextView
-                android:id="@+id/bearing"
+            <View
+                android:layout_width="5dp"
+                android:layout_height="2dp"/>
+            <Button
+                android:id="@+id/cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bearing"
-                android:layout_weight="1"
-                android:textColor="@color/colorPrimary"
-                android:gravity="center"
+                android:text="Cancel"
+                android:background="@color/colorPrimary"
+                android:textColor="#ffffff"
                 />
         </LinearLayout>
-        <Spinner
-            android:id="@+id/placeSelector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tooltipText="Choose place"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:backgroundTintMode="src_atop"
-            />
-        <Button
-            android:id="@+id/open_in_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Open in Map"
-            android:background="@color/colorPrimary"
-            android:textColor="#ffffff"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:layout_marginBottom="30dp"
-            />
     </LinearLayout>
 </ScrollView>

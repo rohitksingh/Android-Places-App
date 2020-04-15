@@ -10,12 +10,15 @@ import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,15 +47,19 @@ import java.util.List;
  * @version February 2016
  */
 
-public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ConfirmationDialogCallback, RPCCallback {
+public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ConfirmationDialogCallback, RPCCallback, View.OnClickListener {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private TextView distance, bearing;
     private Spinner placePicker;
+    private Button openInMap;
     private PlaceDescription currentPlace;
     private List<PlaceDescription> otherPlaces;
     private int INDEX;
     private boolean is_activity_modified = false;
+
+    private PlaceDescription selectPlace;
+
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -75,7 +82,10 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
             currentPlace = AppUtility.getAllPlacesFromMemory().get(INDEX);
             setDataToViews();
             is_activity_modified = true;
+        }else if(req==9999 && res == Activity.RESULT_OK){
+            is_activity_modified = true;
         }
+
     }
 
     @Override
@@ -127,6 +137,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         setDistance(position);
         setBearing(position);
+        selectPlace = otherPlaces.get(position);
     }
 
     @Override
@@ -134,6 +145,13 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    @Override
+    public void onClick(View v) {
+
+        if(v.getId()==R.id.open_in_map){
+            openMapActivity();
+        }
+    }
 
     /***********************************************************************************************
      *                                  Private methods
@@ -144,6 +162,16 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         intent.putExtra(AppUtility.CURRENT_PLACE, currentPlace);
         intent.putExtra(AppUtility.INDEX,INDEX);
         startActivityForResult(intent,8000);
+    }
+
+    private void openMapActivity(){
+        Log.d("", "openMap: ");
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra(AppUtility.FROM_LOCATION, currentPlace);
+        intent.putExtra(AppUtility.TO_LOCATION,selectPlace);
+//        startActivity(intent);
+        startActivityForResult(intent, 9999);
+
     }
 
     private void setDistance(int position){
@@ -170,6 +198,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     private void getDataFromIntent(){
         currentPlace = getCurrentPlace();
+        selectPlace = currentPlace;
         otherPlaces = getOtherPlaces();
         INDEX = getIntent().getIntExtra("INDEX",0);
     }
@@ -199,6 +228,9 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         distance = findViewById(R.id.distance);
         bearing = findViewById(R.id.bearing);
         placePicker = findViewById(R.id.placeSelector);
+        openInMap = findViewById(R.id.open_in_map);
+        openInMap.setOnClickListener(this);
+
     }
 
     private void setDataToViews(){
@@ -218,11 +250,23 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         String name = allplaces.get(INDEX).getName();
         allplaces.remove(INDEX);
         setResult(Activity.RESULT_OK);
-        AppUtility.deletePlaceOnServer(this, name);
+        deletePlaceOnserver(name);
+        deletePlaceOnDatabase(name);
         Toast.makeText(this, "Removing "+name, Toast.LENGTH_SHORT).show();
         finish();
 
     }
+
+    private void deletePlaceOnserver(String name){
+        AppUtility.deletePlaceOnServer(this, name);
+    }
+
+    private void deletePlaceOnDatabase(String name){
+        DBUtility.deletePlaceOnDataBase(name);
+    }
+
+
+
 
     @Override
     public void okButtonClicked() {
@@ -238,4 +282,5 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     public void resultLoaded(Object object) {
 
     }
+
 }

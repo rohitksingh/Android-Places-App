@@ -1,11 +1,13 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +15,14 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.R;
+import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -40,12 +44,14 @@ import edu.asu.msse.rsingh92.assignment1.R;
  * @version February 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback {
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback , SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
     private PlaceAdapter adapter;
     private List<PlaceDescription> allPlaces;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -55,10 +61,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
 
-
-
         // initiate request to server to get the names of all students to be placed in the spinner
 
+        setupSwipeTorefesh();
         placeRecyclerView = findViewById(R.id.placeRV);
         llm = new LinearLayoutManager(this);
         allPlaces = AppUtility.getAllPlacesFromMemory();
@@ -124,6 +129,15 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
                 openAddPlaceActivity();
                 return true;
 
+            case R.id.menu_refresh:
+
+
+                swipeRefreshLayout.setRefreshing(true);
+
+                syncWithServer(this);
+
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -151,5 +165,43 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     @Override
     public void resultLoaded(Object object) {
 
+        if(object!=null){
+            Toast.makeText(this, "Synced", Toast.LENGTH_SHORT).show();
+
+            allPlaces = AppUtility.getAllPlacesFromMemory();
+
+            DBUtility.deleteAllPlacesOnDatabase();
+            DBUtility.addAllPlacesToDatabase(allPlaces);
+
+            adapter = new PlaceAdapter(this,allPlaces);
+            placeRecyclerView.setAdapter(adapter);
+        }else {
+            Toast.makeText(PlaceListActivity.this, "Server is offline", Toast.LENGTH_SHORT).show();
+        }
+
+        swipeRefreshLayout.setRefreshing(false);
+
+
+    }
+
+    public void syncWithServer(Context context){
+        Log.d("HAHA", "syncWithServer: ");
+        AppUtility.getAllPlacesFromServer(context);
+    }
+
+    @Override
+    public void onRefresh() {
+        syncWithServer(this);
+    }
+
+    public void setupSwipeTorefesh(){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(
+                getResources().getColor(android.R.color.holo_blue_bright),
+                getResources().getColor(android.R.color.holo_green_light),
+                getResources().getColor(android.R.color.holo_orange_light),
+                getResources().getColor(android.R.color.holo_red_light)
+        );
     }
 }

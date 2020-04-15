@@ -1,7 +1,10 @@
 package edu.asu.msse.rsingh92.assignment1.utilities;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +47,9 @@ public class AppUtility {
     public static String MODIFY_PLACE="AppUtility.MODIFY_PLACE";
     public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
     public static String INDEX = "AppUtility.INDEX";
+    public static String FROM_LOCATION = "AppUtility.FROM_LOCATION";
+    public static String TO_LOCATION = "AppUtility.TO_LOCATION";
+
     private static List<PlaceDescription> allplaces = new ArrayList<>();
 
     private static final String TAG = "AppUtility";
@@ -119,6 +125,13 @@ public class AppUtility {
         return allplaces;
     }
 
+    public static List<PlaceDescription> dropAppPlacesOnMemory(){
+        return allplaces = new ArrayList<>();
+    }
+
+    public static void setAllPlacesOnMemory(List<PlaceDescription> _allplaces){
+        allplaces = _allplaces;
+    }
 
 
     public static void getAllPlacesFromServer(Context context){
@@ -127,6 +140,10 @@ public class AppUtility {
                     new Object[]{});
             FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
             ac.execute(mi);
+
+            Log.d("ASYNCCANCEL", "getAllPlacesFromServer: "+ac.getStatus().name());
+
+
         } catch (Exception ex) {
             Log.d(TAG, "loadAllPlaces: ");
         }
@@ -198,6 +215,21 @@ public class AppUtility {
 
         }
         return place;
+    }
+
+    public static PlaceDescription getDummyPlace(){
+
+        PlaceDescription placeDescription = new PlaceDescription();
+        placeDescription.setName("Delhi");
+        placeDescription.setDescription("Delhi is a place");
+        placeDescription.setCategory("Capital");
+        placeDescription.setAddressTitle("Delhi Title");
+        placeDescription.setAddressStreet("Delhi Address street");
+        placeDescription.setElevation(4500+"");
+        placeDescription.setLatitude(273.33);
+        placeDescription.setLongitude(273.11);
+        return placeDescription;
+
     }
 
 }
