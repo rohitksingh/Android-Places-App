@@ -152,7 +152,13 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
 
 
     private void savePlaceOnDataBase(){
-        DBUtility.addPlaceToDatabase(getPlaceFromView());
+
+        if(MODIFY_MODE==EDIT_PLACE){
+           DBUtility.updatePlaceToDatabase(getPlaceFromView());
+        }else {
+            DBUtility.addPlaceToDatabase(getPlaceFromView());
+        }
+
     }
     private void savePlaceOnServer(){
         AppUtility.addPlaceOnServer(this, getPlaceFromView());

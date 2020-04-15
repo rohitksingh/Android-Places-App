@@ -129,6 +129,32 @@ public class DBUtility {
 
     }
 
+
+    public static void updatePlaceToDatabase(PlaceDescription placeDescription){
+
+        String name = placeDescription.getName();
+        String description = placeDescription.getDescription();
+        String category = placeDescription.getCategory();
+        String addresstitle = placeDescription.getAddressTitle();
+        String addressstreet = placeDescription.getAddressStreet();
+        Double elevation = Double.parseDouble(placeDescription.getElevation());
+        Double latitude = placeDescription.getLatitude();
+        Double longitude = placeDescription.getLongitude();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name",name);
+        contentValues.put("description",description);
+        contentValues.put("category",category);
+        contentValues.put("address_title",addresstitle);
+        contentValues.put("address_street",addressstreet);
+        contentValues.put("elevation",elevation);
+        contentValues.put("latitude",latitude);
+        contentValues.put("longitude",longitude);
+
+        sqLiteDatabase.update("place", contentValues, "name = ?", new String[]{name});
+
+    }
+
     public static int deleteAllPlacesOnDatabase(){
         return sqLiteDatabase.delete("place", "1", null);
     }
