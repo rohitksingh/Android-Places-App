@@ -3,19 +3,14 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCErrorCallback;
+
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
@@ -46,20 +41,53 @@ public class SplashActivity extends AppCompatActivity implements RPCSyncCallback
 
     private LottieAnimationView lottieAnimationView;
 
+    /***********************************************************************************************
+     *                                  Lifecycle methods
+     ***********************************************************************************************/
     @Override
     public void onCreate(Bundle savesInstanceState){
         super.onCreate(savesInstanceState);
         setContentView(R.layout.activity_splash);
-        lottieAnimationView = findViewById(R.id.splash_anim);
-        DBUtility.initDatabase(this);
-        TempDBUtility.init(this);
+        initView();
+        initUtilities();
+        loadListFromDatabase();
+        displayLoading();
+    }
 
-        Log.d("BACKUP", "onCreate: "+TempDBUtility.get(TempDBUtility.BACKUP).size());
+    /***********************************************************************************************
+     *                                  Callback methods
+     ***********************************************************************************************/
+    @Override
+    public void resultLoaded(Object object) {
+        startActivity(new Intent(SplashActivity.this, PlaceListActivity.class));
+        finish();
+    }
 
+    @Override
+    public void onFail(String methodname) {
+
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
+
+    private void loadListFromDatabase(){
         List<PlaceDescription> allplaces = DBUtility.getAllPlacesFromDB();
         AppUtility.setAllPlacesOnMemory(allplaces);
+    }
 
+    private void initView(){
+        lottieAnimationView = findViewById(R.id.splash_anim);
+    }
 
+    private void initUtilities(){
+        DBUtility.initDatabase(this);
+        TempDBUtility.init(this);
+    }
+
+    private void displayLoading(){
         new AsyncTask<Void, Void, Void>() {
 
             @Override
@@ -81,32 +109,5 @@ public class SplashActivity extends AppCompatActivity implements RPCSyncCallback
             }
 
         }.execute();
-
-
-
-
-//        loadListFromRPC();
-
-    }
-
-    @Override
-    public void resultLoaded(Object object) {
-        startActivity(new Intent(SplashActivity.this, PlaceListActivity.class));
-        finish();
-    }
-
-
-    private void loadListFromRPC(){
-        AppUtility.getAllPlacesFromServer(this);
-    }
-
-    @Override
-    public void onFail(String methodname) {
-
-    }
-
-    @Override
-    public void onSuccess(Object object) {
-
     }
 }

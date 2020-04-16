@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCErrorCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
@@ -15,7 +13,6 @@ import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
 import edu.asu.msse.rsingh92.assignment1.utilities.TempDBUtility;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,12 +53,13 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     private TextView distance, bearing;
     private Spinner placePicker;
     private Button openInMap;
+
     private PlaceDescription currentPlace;
+    private PlaceDescription selectPlace;
+
     private List<PlaceDescription> otherPlaces;
     private int INDEX;
     private boolean is_activity_modified = false;
-
-    private PlaceDescription selectPlace;
 
 
     /***********************************************************************************************
@@ -72,11 +70,9 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
-        initViews();
+        initView();
         getDataFromIntent();
-        populateSpinner();
-        setDataToViews();
-
+        setViewData();
     }
 
     @Override
@@ -156,6 +152,32 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         }
     }
 
+    @Override
+    public void okButtonClicked() {
+        deletePlace();
+    }
+
+    @Override
+    public void cancelButtonClicked() {
+
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
+
+    }
+
+    @Override
+    public void onFail(String methodname) {
+        Toast.makeText(this, "Failed to Update on server", Toast.LENGTH_SHORT).show();
+        TempDBUtility.saveData(currentPlace.getName());
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
+
     /***********************************************************************************************
      *                                  Private methods
      ***********************************************************************************************/
@@ -168,13 +190,10 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void openMapActivity(){
-        Log.d("", "openMap: ");
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(AppUtility.FROM_LOCATION, currentPlace);
         intent.putExtra(AppUtility.TO_LOCATION,selectPlace);
-//        startActivity(intent);
         startActivityForResult(intent, 9999);
-
     }
 
     private void setDistance(int position){
@@ -219,7 +238,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
         placePicker.setOnItemSelectedListener(this);
     }
 
-    private void initViews(){
+    private void initView(){
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);
         category = findViewById(R.id.category);
@@ -269,31 +288,8 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-
-
-    @Override
-    public void okButtonClicked() {
-        deletePlace();
-    }
-
-    @Override
-    public void cancelButtonClicked() {
-
-    }
-
-    @Override
-    public void resultLoaded(Object object) {
-
-    }
-
-    @Override
-    public void onFail(String methodname) {
-        Toast.makeText(this, "Failed to Update on server", Toast.LENGTH_SHORT).show();
-        TempDBUtility.saveData(currentPlace.getName());
-    }
-
-    @Override
-    public void onSuccess(Object object) {
-
+    private void setViewData(){
+        populateSpinner();
+        setDataToViews();
     }
 }
