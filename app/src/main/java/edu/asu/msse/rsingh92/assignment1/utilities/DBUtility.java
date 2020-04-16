@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.airbnb.lottie.L;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +37,6 @@ public class DBUtility {
     private static PlaceDataBase placeDataBase;
     private static SQLiteDatabase sqLiteDatabase;
     private static Context context;
-    private static List<PlaceDescription> nonSyncedPlaces;
 
     public static void initDatabase(Context _context){
 
@@ -56,8 +53,6 @@ public class DBUtility {
 
     public static List<PlaceDescription> getAllPlacesFromDB(){
 
-        Log.d("AAA", "inside");
-
         List<PlaceDescription> allPlaces = new ArrayList<>();
 
         String select_all_query = "SELECT * FROM place";
@@ -65,8 +60,6 @@ public class DBUtility {
         c.moveToFirst();
 
         int count = c.getCount();
-
-        Log.d("AAA", count+"");
 
         for(int i=0;i<count;i++){
 
@@ -81,10 +74,7 @@ public class DBUtility {
             place.setLatitude((c.getDouble(c.getColumnIndex("latitude"))));
             place.setElevation(c.getString(c.getColumnIndex("elevation")));
 
-            Log.d("AAA", ""+i+": "+place.getName());
-
             allPlaces.add(place);
-
             c.moveToNext();
         }
 
@@ -109,10 +99,6 @@ public class DBUtility {
         Double latitude = place.getLatitude();
         Double longitude = place.getLongitude();
 
-//        String insertQuery = "INSERT INTO place VALUES("+name+","+description+","+category+","+addresstitle+","+addressstreet+","+elevation+","+latitude+","+longitude+");";
-//        sqLiteDatabase.execSQL(insertQuery);
-
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("name",name);
         contentValues.put("description",description);
@@ -124,9 +110,6 @@ public class DBUtility {
         contentValues.put("longitude",longitude);
 
         long rownum = sqLiteDatabase.insert("place",null,contentValues);
-        Log.d("AAA", ""+rownum);
-
-
     }
 
 
@@ -167,18 +150,7 @@ public class DBUtility {
     }
 
     /**
-     *   Methods which deal with places that could not be pused to Server
+     *   Methods which deal with places that could not be pushed to Server
      */
-    public static List<PlaceDescription> getAllNonSyncedPlaces(){
-        return nonSyncedPlaces;
-    }
-
-    public static void addInNonSynedPlaces(PlaceDescription nonSyncPlace){
-        nonSyncedPlaces.add(nonSyncPlace);
-    }
-
-    public static void resetNonSyncPlace(){
-        nonSyncedPlaces = new ArrayList<PlaceDescription>();
-    }
 
 }

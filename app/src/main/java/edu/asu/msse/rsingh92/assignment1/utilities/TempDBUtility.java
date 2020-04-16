@@ -33,7 +33,7 @@ public class TempDBUtility {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         editor.putString(key, json);
-        editor.apply();     // This line is IMPORTANT !!!
+        editor.apply();
     }
 
     public static Set<String> get(String key){
@@ -46,7 +46,6 @@ public class TempDBUtility {
 
     public static void initBackUp(){
         save(new HashSet<String>(), BACKUP);
-        Log.d("BACKUP", "Temp is reset");
     }
 
     public static void saveData(String name){
@@ -59,20 +58,14 @@ public class TempDBUtility {
 
         Set<String> data = get(BACKUP);
 
-        Log.d("BACKUP", " Sync start");
-
         for(String name: data){
             PlaceDescription place = getPlace(name);
             if(place ==null){
-                Log.d("BACKUP", name+" is deleted");
                 AppUtility.deletePlaceOnServer(context, name);
             }else {
-                Log.d("BACKUP", name+" is changed");
                 AppUtility.addPlaceOnServer(context, place);
             }
         }
-
-
 
     }
 
