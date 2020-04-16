@@ -38,9 +38,10 @@ import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 
 public class ConfirmationDialog extends AppCompatDialogFragment {
 
-    private AlertDialog.Builder builder;
     private TextView messageTextView;
     private Button ok, cancel;
+    private AlertDialog.Builder builder;
+
     private String message;
     private ConfirmationDialogCallback callback;
 
