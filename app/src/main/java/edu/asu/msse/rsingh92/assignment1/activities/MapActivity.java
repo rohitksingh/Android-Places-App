@@ -24,10 +24,12 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.YesNoCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
+import edu.asu.msse.rsingh92.assignment1.utilities.TempDBUtility;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -48,7 +50,7 @@ import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
  *
  * @version April 2016
  */
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, RPCCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, RPCSyncCallback {
 
     private GoogleMap mMap;
     private Marker marker;
@@ -60,6 +62,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private PlaceDescription toLocation;
 
     private SupportMapFragment mapFragment;
+    private PlaceDescription newAddedPlace;
 
     private boolean ifNewPlaceAdded = false;
 
@@ -222,6 +225,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if(res == Activity.RESULT_OK){
 
                 PlaceDescription placeAdded = (PlaceDescription)data.getSerializableExtra(AppUtility.MODIFY_PLACE);
+                newAddedPlace = placeAdded;
                 LatLng latLng = new LatLng(placeAdded.getLatitude(), placeAdded.getLongitude());
                 drawMarkeronMap(placeAdded);
                 addPlace(placeAdded);
@@ -285,5 +289,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Intent fillPlaceInfoIntent = new Intent(this, CreatePlaceOnTouchActivity.class);
         fillPlaceInfoIntent.putExtra(AppUtility.MODIFY_PLACE, placeDescription);
         startActivityForResult(fillPlaceInfoIntent, MODIFY_PLACE_REQ);
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
+
+    @Override
+    public void onFail(String methodname) {
+        Toast.makeText(this, "Failed to Update on server", Toast.LENGTH_SHORT).show();
+        TempDBUtility.saveData(newAddedPlace.getName());
     }
 }

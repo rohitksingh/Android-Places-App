@@ -15,10 +15,13 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCErrorCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
+import edu.asu.msse.rsingh92.assignment1.utilities.TempDBUtility;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -39,7 +42,7 @@ import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
  *
  * @version February 2016
  */
-public class ModifyPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCCallback {
+public class ModifyPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCSyncCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private PlaceDescription currentPlace;
@@ -278,5 +281,16 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
         }
 
         return validationPassed;
+    }
+
+    @Override
+    public void onFail(String methodname) {
+        Toast.makeText(this, "Failed to Update on server", Toast.LENGTH_SHORT).show();
+        TempDBUtility.saveData(getPlaceFromView().getName());
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
     }
 }
