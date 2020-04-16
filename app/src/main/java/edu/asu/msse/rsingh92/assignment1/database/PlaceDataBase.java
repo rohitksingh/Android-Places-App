@@ -37,13 +37,14 @@ import edu.asu.msse.rsingh92.assignment1.R;
  */
 public class PlaceDataBase extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final String TAG = "PlaceDataBase";
+
     private static String dbName = "place";
-    private Context context;
+    private static final int DATABASE_VERSION = 1;
     private String dbPath;
     private SQLiteDatabase crsDB;
 
-    private static final String TAG = "PlaceDataBase";
+    private Context context;
 
     public PlaceDataBase(Context context) {
         super(context, dbName, null, DATABASE_VERSION);
@@ -55,23 +56,15 @@ public class PlaceDataBase extends SQLiteOpenHelper {
 
         String myPath = dbPath + dbName + ".db";
 
-        Log.d(TAG, "openDB: "+myPath);
-
         if(checkDB()) {
-            Log.d(TAG, "openDB: databaseexists");
             crsDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-            Log.d(TAG, "openDB1: "+crsDB.getPath());
         }else{
-
-            Log.d(TAG, "openDB: database does not exist");
 
             try {
                 this.copyDB();
-                Log.d(TAG, "openDB: copying database from "+myPath);
                 crsDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
             }catch(Exception ex) {
                 Log.d(TAG, "openDB1: unable to copy and open db");
-                android.util.Log.w(this.getClass().getSimpleName(),"unable to copy and open db: "+ex.getMessage());
             }
         }
         return crsDB;
@@ -97,46 +90,31 @@ public class PlaceDataBase extends SQLiteOpenHelper {
      */
     private boolean checkDB(){
 
-        Log.d(TAG, "checkDB: Enter");
-        //does the database exist and is it initialized?
         SQLiteDatabase checkDB = null;
         boolean crsTabExists = false;
         try{
             String path = dbPath + dbName + ".db";
-
             File aFile = new File(path);
             if(aFile.exists()){
-                Log.d(TAG, "checkDB: This file exists");
                 checkDB = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
-
-                Log.d(TAG, "checkDB: is database null? "+checkDB);
-
                 if (checkDB!=null) {
 
                     Cursor tabChk = checkDB.rawQuery("SELECT name FROM sqlite_master where type='table' and name='place';", null);
-
-                    Log.d(TAG, "checkDB: Table exists"+(tabChk==null));
-
                     if(tabChk!=null){
                         Cursor c= checkDB.rawQuery("SELECT * FROM place", null);
-                        Log.d(TAG, "checkDB: ");
                         if(c.getCount()!=0){
-                            Log.d(TAG, "checkDB: total enties"+c.getCount());
                             crsTabExists = true;
                         }
                     }
-
                 }
             }
         }catch(SQLiteException e){
-            Log.d(TAG, "checkDB: ERROR");
             android.util.Log.w("CourseDB->checkDB",e.getMessage());
         }
+
         if(checkDB != null){
             checkDB.close();
         }
-
-        Log.d(TAG, "checkDB: "+crsTabExists);
 
         return crsTabExists;
     }
@@ -145,18 +123,13 @@ public class PlaceDataBase extends SQLiteOpenHelper {
         try {
 
             if(!checkDB()){
-
-                Log.d(TAG, "copyDB: entered into Streams");
-
                 InputStream ip =  context.getResources().openRawResource(R.raw.place);
-                // make sure the database path exists. if not, create it.
+
                 File aFile = new File(dbPath);
                 if(!aFile.exists()){
                     aFile.mkdirs();
                 }
                 String op=  dbPath  +  dbName +".db";
-
-                Log.d(TAG, "copyDB: copying into"+ op);
 
                 OutputStream output = new FileOutputStream(op);
                 byte[] buffer = new byte[1024];
