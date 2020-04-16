@@ -1,6 +1,8 @@
 package edu.asu.msse.rsingh92.assignment1.asynctasks;
 
 import android.os.AsyncTask;
+import android.print.PageRange;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,6 +10,8 @@ import org.json.JSONException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCErrorCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.rpc.HttpRPCRequest;
 import edu.asu.msse.rsingh92.assignment1.rpc.RPCMethodMetadata;
 
@@ -32,6 +36,9 @@ import edu.asu.msse.rsingh92.assignment1.rpc.RPCMethodMetadata;
  */
 public class ModifyPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, RPCMethodMetadata> {
 
+    private RPCMethodMetadata metadata;
+    boolean isServerOffline = false;
+
     @Override
     protected RPCMethodMetadata doInBackground(RPCMethodMetadata... methodInformations) {
 
@@ -40,6 +47,9 @@ public class ModifyPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             try {
                 ja = new JSONArray(methodInformations[0].params);
+
+                metadata = methodInformations[0];
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -58,10 +68,24 @@ public class ModifyPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, 
         try {
             methodInformations[0].resultAsJson = conn.makeRequest(requestData);
         } catch (Exception e) {
+            Log.d("FINISHEDD", "Method Do in bg");
+            isServerOffline = true;
             e.printStackTrace();
         }
 
         return null;
     }
 
+
+    @Override
+    protected void onPostExecute(RPCMethodMetadata rpcMethodMetadata) {
+        super.onPostExecute(rpcMethodMetadata);
+        RPCSyncCallback errorCallback =   (RPCSyncCallback) metadata.callback;
+        if(isServerOffline){
+            errorCallback.onFail(metadata.method);
+        }else {
+            errorCallback.onSuccess("SUCCESS");
+        }
+
+    }
 }

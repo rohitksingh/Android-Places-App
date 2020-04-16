@@ -19,10 +19,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
+import edu.asu.msse.rsingh92.assignment1.utilities.TempDBUtility;
 
 /*
  * Copyright 2020 Rohit Kumar Singh,
@@ -44,14 +46,15 @@ import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
  * @version February 2016
  */
 
-public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCCallback , SwipeRefreshLayout.OnRefreshListener {
+public class PlaceListActivity extends AppCompatActivity implements ListClickListener, RPCSyncCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView placeRecyclerView;
     private LinearLayoutManager llm;
     private PlaceAdapter adapter;
     private List<PlaceDescription> allPlaces;
-
     private SwipeRefreshLayout swipeRefreshLayout;
+    private int unpushedDataSize=0;
+    private int dataPushed=0;
 
     /***********************************************************************************************
      *                                  Lifecycle methods
@@ -175,6 +178,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
             adapter = new PlaceAdapter(this,allPlaces);
             placeRecyclerView.setAdapter(adapter);
+            TempDBUtility.initBackUp();
         }else {
             Toast.makeText(PlaceListActivity.this, "Server is offline", Toast.LENGTH_SHORT).show();
         }
@@ -186,7 +190,15 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
     public void syncWithServer(Context context){
         Log.d("HAHA", "syncWithServer: ");
-        AppUtility.getAllPlacesFromServer(context);
+        dataPushed = 0;
+        unpushedDataSize = TempDBUtility.get(TempDBUtility.BACKUP).size();
+        if(unpushedDataSize!=0){
+            Log.d("HAHA", "FIRST PUSHING UNPULBLISHED");
+            TempDBUtility.pushDataToServer(this);
+        }else {
+            Log.d("HAHA", "NO Data in tempdatabase");
+            loadDataFromServer();
+        }
     }
 
     @Override
@@ -204,4 +216,33 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
                 getResources().getColor(android.R.color.holo_red_light)
         );
     }
+
+    @Override
+    public void onSuccess(Object object) {
+        checkAndPullData();
+        Log.d("BACKUP", "success");
+    }
+
+    @Override
+    public void onFail(String methodname) {
+        checkAndPullData();
+        Log.d("BACKUP", "failed");
+    }
+
+    private void loadDataFromServer(){
+        AppUtility.getAllPlacesFromServer(this);
+        Log.d("BACKUP", "Loading data from servert");
+    }
+
+
+    private void checkAndPullData(){
+        dataPushed++;
+        Log.d("BACKUP", "in progress "+dataPushed);
+        if(dataPushed==unpushedDataSize){
+            Log.d("BACKUP", "condition satisfied "+dataPushed);
+            loadDataFromServer();
+        }
+    }
+
+
 }

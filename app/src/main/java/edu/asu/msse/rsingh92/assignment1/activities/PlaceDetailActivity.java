@@ -7,10 +7,13 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCErrorCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
+import edu.asu.msse.rsingh92.assignment1.utilities.TempDBUtility;
 
 import android.util.Log;
 import android.view.Menu;
@@ -47,7 +50,7 @@ import java.util.List;
  * @version February 2016
  */
 
-public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ConfirmationDialogCallback, RPCCallback, View.OnClickListener {
+public class PlaceDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ConfirmationDialogCallback, RPCSyncCallback, View.OnClickListener {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
     private TextView distance, bearing;
@@ -283,4 +286,14 @@ public class PlaceDetailActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    @Override
+    public void onFail(String methodname) {
+        Toast.makeText(this, "Failed to Update on server", Toast.LENGTH_SHORT).show();
+        TempDBUtility.saveData(currentPlace.getName());
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
 }

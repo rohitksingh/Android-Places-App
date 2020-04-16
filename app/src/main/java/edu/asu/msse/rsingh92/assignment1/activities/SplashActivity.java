@@ -3,17 +3,24 @@ package edu.asu.msse.rsingh92.assignment1.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCErrorCallback;
+import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
+import edu.asu.msse.rsingh92.assignment1.utilities.TempDBUtility;
 
 
 /*
@@ -35,7 +42,7 @@ import edu.asu.msse.rsingh92.assignment1.utilities.DBUtility;
  *
  * @version February 2016
  */
-public class SplashActivity extends AppCompatActivity implements RPCCallback {
+public class SplashActivity extends AppCompatActivity implements RPCSyncCallback {
 
     private LottieAnimationView lottieAnimationView;
 
@@ -45,7 +52,9 @@ public class SplashActivity extends AppCompatActivity implements RPCCallback {
         setContentView(R.layout.activity_splash);
         lottieAnimationView = findViewById(R.id.splash_anim);
         DBUtility.initDatabase(this);
-//        DBUtility.addPlaceToDatabase(AppUtility.getDummyPlace());
+        TempDBUtility.init(this);
+
+        Log.d("BACKUP", "onCreate: "+TempDBUtility.get(TempDBUtility.BACKUP).size());
 
         List<PlaceDescription> allplaces = DBUtility.getAllPlacesFromDB();
         AppUtility.setAllPlacesOnMemory(allplaces);
@@ -91,4 +100,13 @@ public class SplashActivity extends AppCompatActivity implements RPCCallback {
         AppUtility.getAllPlacesFromServer(this);
     }
 
+    @Override
+    public void onFail(String methodname) {
+
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
 }
