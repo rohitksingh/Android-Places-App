@@ -22,6 +22,6 @@ package edu.asu.msse.rsingh92.assignment1.callbacks;
 
 public interface ListClickListener {
 
-    public void itemClicked(int index);
+    void itemClicked(int index);
 
 }
