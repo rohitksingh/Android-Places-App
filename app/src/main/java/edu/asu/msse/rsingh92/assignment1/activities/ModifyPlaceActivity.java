@@ -14,8 +14,6 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ConfirmationDialogCallback;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCErrorCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
@@ -45,8 +43,11 @@ import edu.asu.msse.rsingh92.assignment1.utilities.TempDBUtility;
 public class ModifyPlaceActivity extends AppCompatActivity implements ConfirmationDialogCallback, RPCSyncCallback {
 
     private EditText name, description, category, addressTitle, addressStreet, elevation, latitude, longitude;
+
     private PlaceDescription currentPlace;
+
     private int INDEX;
+
     private static final int ADD_NEW_PLACE = 9087;
     private static final int EDIT_PLACE = 9833;
     private int MODIFY_MODE=ADD_NEW_PLACE;
@@ -59,8 +60,8 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
         getModifyMode();
-        initViews();
-        getDataFromPreviousActivity();
+        initView();
+        getDataFromIntent();
     }
 
 
@@ -76,11 +77,9 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
 
             case R.id.save:
 
@@ -101,11 +100,43 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
 
     }
 
+    /***********************************************************************************************
+     *                                  Callback methods
+     ***********************************************************************************************/
+    @Override
+    public void okButtonClicked() {
+        savePlaceOnServer();
+        savePlaceOnDataBase();
+        savePlace();
+    }
+
+    @Override
+    public void cancelButtonClicked() {
+
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
+
+    }
+
+
+    @Override
+    public void onFail(String methodname) {
+        Toast.makeText(this, "Failed to Update on server", Toast.LENGTH_SHORT).show();
+        TempDBUtility.saveData(getPlaceFromView().getName());
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+
+    }
+
 
     /***********************************************************************************************
      *                                   Private methods
      ***********************************************************************************************/
-    private void getDataFromPreviousActivity(){
+    private void getDataFromIntent(){
 
         if(MODIFY_MODE==EDIT_PLACE){
             disableNameField();
@@ -127,7 +158,7 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
         longitude.setText(currentPlace.getLongitude().toString());
     }
 
-    private void initViews(){
+    private void initView(){
         name = findViewById(R.id.name);
         description = findViewById(R.id.description);
         category = findViewById(R.id.category);
@@ -157,7 +188,7 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
     private void savePlaceOnDataBase(){
 
         if(MODIFY_MODE==EDIT_PLACE){
-           DBUtility.updatePlaceToDatabase(getPlaceFromView());
+            DBUtility.updatePlaceToDatabase(getPlaceFromView());
         }else {
             DBUtility.addPlaceToDatabase(getPlaceFromView());
         }
@@ -207,24 +238,6 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
             getSupportActionBar().setTitle("Edit Place");
         }
     }
-
-    @Override
-    public void okButtonClicked() {
-        savePlaceOnServer();
-        savePlaceOnDataBase();
-        savePlace();
-    }
-
-    @Override
-    public void cancelButtonClicked() {
-
-    }
-
-    @Override
-    public void resultLoaded(Object object) {
-
-    }
-
 
     private boolean ifValadationPassed(){
 
@@ -283,14 +296,4 @@ public class ModifyPlaceActivity extends AppCompatActivity implements Confirmati
         return validationPassed;
     }
 
-    @Override
-    public void onFail(String methodname) {
-        Toast.makeText(this, "Failed to Update on server", Toast.LENGTH_SHORT).show();
-        TempDBUtility.saveData(getPlaceFromView().getName());
-    }
-
-    @Override
-    public void onSuccess(Object object) {
-
-    }
 }

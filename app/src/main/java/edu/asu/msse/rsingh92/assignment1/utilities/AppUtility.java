@@ -44,15 +44,15 @@ import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 
 public class AppUtility {
 
+    private static final String TAG = "AppUtility";
+
+    private static List<PlaceDescription> allplaces = new ArrayList<>();
+
     public static String MODIFY_PLACE="AppUtility.MODIFY_PLACE";
     public static String CURRENT_PLACE="AppUtility.CURRENT_PLACE";
     public static String INDEX = "AppUtility.INDEX";
     public static String FROM_LOCATION = "AppUtility.FROM_LOCATION";
     public static String TO_LOCATION = "AppUtility.TO_LOCATION";
-
-    private static List<PlaceDescription> allplaces = new ArrayList<>();
-
-    private static final String TAG = "AppUtility";
 
     public static void openConfirmationDialog(AppCompatActivity activity, String msg){
         ConfirmationDialog confirmationDialog=new ConfirmationDialog((ConfirmationDialogCallback)activity, msg);
@@ -140,10 +140,6 @@ public class AppUtility {
                     new Object[]{});
             FetchPlaceAsyncTask ac = new FetchPlaceAsyncTask(context);
             ac.execute(mi);
-
-            Log.d("ASYNCCANCEL", "getAllPlacesFromServer: "+ac.getStatus().name());
-
-
         } catch (Exception ex) {
             Log.d(TAG, "loadAllPlaces: ");
         }
@@ -172,7 +168,6 @@ public class AppUtility {
         deletePlaceAsyncTask.execute(mi);
 
     }
-
 
     public static JSONObject getJsonFromPlaceDesc(PlaceDescription placeDescription){
 

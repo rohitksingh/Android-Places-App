@@ -1,20 +1,15 @@
 package edu.asu.msse.rsingh92.assignment1.activities;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.asu.msse.rsingh92.assignment1.R;
-import edu.asu.msse.rsingh92.assignment1.callbacks.YesNoCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
 
@@ -39,51 +34,28 @@ import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
  */
 public class CreatePlaceOnTouchActivity extends AppCompatActivity implements View.OnClickListener{
 
-
     private EditText name, desc, category, elevation, latitude, longitude, streetTitle, streetAddress;
     private Button save, cancel;
+
     private PlaceDescription place;
 
+    /***********************************************************************************************
+     *                                  Lifecycle methods
+     ***********************************************************************************************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_add_place);
-        name = findViewById(R.id.name);
-        desc = findViewById(R.id.desc);
-        elevation = findViewById(R.id.elevation);
-        category = findViewById(R.id.category);
-        latitude = findViewById(R.id.latitude);
-        longitude = findViewById(R.id.longitude);
-        save = findViewById(R.id.save);
-        cancel = findViewById(R.id.cancel);
-        streetTitle = findViewById(R.id.streetTitle);
-        streetAddress = findViewById(R.id.streetAddress);
-
-        place = (PlaceDescription)getIntent().getSerializableExtra(AppUtility.MODIFY_PLACE);
-
-        setValues();
-        save.setOnClickListener(this);
-        cancel.setOnClickListener(this);
-
-
+        initView();
+        getDataFromIntent();
+        setViewData();
     }
 
-    public void setValues(){
-        latitude.setText(place.getLatitude().toString());
-        longitude.setText(place.getLongitude().toString());
-    }
 
-    private PlaceDescription getPlaceFromView(){
-        place.setName(name.getText().toString());
-        place.setDescription(desc.getText().toString());
-        place.setCategory(category.getText().toString());
-        place.setElevation(elevation.getText().toString());
-        place.setAddressStreet(streetAddress.getText().toString());
-        place.setAddressTitle(streetTitle.getText().toString());
-        return place;
-    }
-
+    /***********************************************************************************************
+     *                                  Callback methods
+     ***********************************************************************************************/
     @Override
     public void onClick(View v) {
 
@@ -103,6 +75,20 @@ public class CreatePlaceOnTouchActivity extends AppCompatActivity implements Vie
                 break;
 
         }
+    }
+
+    /***********************************************************************************************
+     *                                   Private methods
+     ***********************************************************************************************/
+
+    private PlaceDescription getPlaceFromView(){
+        place.setName(name.getText().toString());
+        place.setDescription(desc.getText().toString());
+        place.setCategory(category.getText().toString());
+        place.setElevation(elevation.getText().toString());
+        place.setAddressStreet(streetAddress.getText().toString());
+        place.setAddressTitle(streetTitle.getText().toString());
+        return place;
     }
 
     private void sendPlaceData(){
@@ -174,4 +160,33 @@ public class CreatePlaceOnTouchActivity extends AppCompatActivity implements Vie
 
         return validationPassed;
     }
+
+    private void setViewData(){
+        latitude.setText(place.getLatitude().toString());
+        longitude.setText(place.getLongitude().toString());
+    }
+
+    private void getDataFromIntent(){
+        place = (PlaceDescription)getIntent().getSerializableExtra(AppUtility.MODIFY_PLACE);
+    }
+
+    private void setListeners(){
+        save.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+    }
+
+    private void initView(){
+        name = findViewById(R.id.name);
+        desc = findViewById(R.id.desc);
+        elevation = findViewById(R.id.elevation);
+        category = findViewById(R.id.category);
+        latitude = findViewById(R.id.latitude);
+        longitude = findViewById(R.id.longitude);
+        save = findViewById(R.id.save);
+        cancel = findViewById(R.id.cancel);
+        streetTitle = findViewById(R.id.streetTitle);
+        streetAddress = findViewById(R.id.streetAddress);
+        setListeners();
+    }
+
 }

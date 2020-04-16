@@ -42,7 +42,6 @@ public class ModifyPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, 
     @Override
     protected RPCMethodMetadata doInBackground(RPCMethodMetadata... methodInformations) {
 
-
         JSONArray ja = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             try {
@@ -68,7 +67,6 @@ public class ModifyPlaceAsyncTask extends AsyncTask<RPCMethodMetadata, Integer, 
         try {
             methodInformations[0].resultAsJson = conn.makeRequest(requestData);
         } catch (Exception e) {
-            Log.d("FINISHEDD", "Method Do in bg");
             isServerOffline = true;
             e.printStackTrace();
         }

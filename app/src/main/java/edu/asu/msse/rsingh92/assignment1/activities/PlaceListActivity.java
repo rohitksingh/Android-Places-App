@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import edu.asu.msse.rsingh92.assignment1.callbacks.ListClickListener;
 import edu.asu.msse.rsingh92.assignment1.adapters.PlaceAdapter;
-import edu.asu.msse.rsingh92.assignment1.callbacks.RPCCallback;
 import edu.asu.msse.rsingh92.assignment1.callbacks.RPCSyncCallback;
 import edu.asu.msse.rsingh92.assignment1.models.PlaceDescription;
 import edu.asu.msse.rsingh92.assignment1.utilities.AppUtility;
@@ -63,30 +62,14 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_placelibrary);
-
-        // initiate request to server to get the names of all students to be placed in the spinner
-
-        setupSwipeTorefesh();
-        placeRecyclerView = findViewById(R.id.placeRV);
-        llm = new LinearLayoutManager(this);
-        allPlaces = AppUtility.getAllPlacesFromMemory();
-        adapter = new PlaceAdapter(this, allPlaces);
-        placeRecyclerView.setLayoutManager(llm);
-        placeRecyclerView.setAdapter(adapter);
+        initView();
+        setViewData();
 
 
-        PlaceDescription placeDescription = new PlaceDescription();
-        placeDescription.setName("Delhi");
-        placeDescription.setDescription("Desc");
-        placeDescription.setCategory("Hike");
-        placeDescription.setLongitude((double) 98932982);
-        placeDescription.setElevation("989898");
-        placeDescription.setLongitude((double) 873872);
-        placeDescription.setAddressTitle("Address title");
-        placeDescription.setAddressStreet("Address street");
+
+
 
     }
-
 
     @Override
     public void onActivityResult(int req, int res, Intent intent){
@@ -98,17 +81,7 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
                 placeRecyclerView.setAdapter(adapter);
             }
         }
-
     }
-
-    /***********************************************************************************************
-     *                                  Callback methods
-     ***********************************************************************************************/
-    @Override
-    public void itemClicked(int index) {
-        openDetailActivity(index);
-    }
-
 
     /***********************************************************************************************
      *                                  Menu Related methods
@@ -122,11 +95,9 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
 
             case R.id.add:
                 openAddPlaceActivity();
@@ -134,19 +105,60 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
 
             case R.id.menu_refresh:
 
-
                 swipeRefreshLayout.setRefreshing(true);
-
                 syncWithServer(this);
-
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
 
         }
-
     }
+
+    /***********************************************************************************************
+     *                                  Callback methods
+     ***********************************************************************************************/
+    @Override
+    public void itemClicked(int index) {
+        openDetailActivity(index);
+    }
+
+    @Override
+    public void onSuccess(Object object) {
+        checkAndPullData();
+    }
+
+    @Override
+    public void onFail(String methodname) {
+        checkAndPullData();
+    }
+
+    @Override
+    public void resultLoaded(Object object) {
+
+        if(object!=null){
+
+            Toast.makeText(this, "Synced", Toast.LENGTH_SHORT).show();
+
+            allPlaces = AppUtility.getAllPlacesFromMemory();
+            DBUtility.deleteAllPlacesOnDatabase();
+            DBUtility.addAllPlacesToDatabase(allPlaces);
+
+            adapter = new PlaceAdapter(this,allPlaces);
+            placeRecyclerView.setAdapter(adapter);
+            TempDBUtility.initBackUp();
+        }else {
+            Toast.makeText(PlaceListActivity.this, "Server is offline", Toast.LENGTH_SHORT).show();
+        }
+
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        syncWithServer(this);
+    }
+
 
     /***********************************************************************************************
      *                                  Private methods
@@ -164,50 +176,47 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
         startActivityForResult(intent,8090);
     }
 
-
-    @Override
-    public void resultLoaded(Object object) {
-
-        if(object!=null){
-            Toast.makeText(this, "Synced", Toast.LENGTH_SHORT).show();
-
-            allPlaces = AppUtility.getAllPlacesFromMemory();
-
-            DBUtility.deleteAllPlacesOnDatabase();
-            DBUtility.addAllPlacesToDatabase(allPlaces);
-
-            adapter = new PlaceAdapter(this,allPlaces);
-            placeRecyclerView.setAdapter(adapter);
-            TempDBUtility.initBackUp();
-        }else {
-            Toast.makeText(PlaceListActivity.this, "Server is offline", Toast.LENGTH_SHORT).show();
-        }
-
-        swipeRefreshLayout.setRefreshing(false);
-
-
-    }
-
-    public void syncWithServer(Context context){
-        Log.d("HAHA", "syncWithServer: ");
+    private void syncWithServer(Context context){
         dataPushed = 0;
         unpushedDataSize = TempDBUtility.get(TempDBUtility.BACKUP).size();
         if(unpushedDataSize!=0){
-            Log.d("HAHA", "FIRST PUSHING UNPULBLISHED");
             TempDBUtility.pushDataToServer(this);
         }else {
-            Log.d("HAHA", "NO Data in tempdatabase");
             loadDataFromServer();
         }
     }
 
-    @Override
-    public void onRefresh() {
-        syncWithServer(this);
+    private void loadDataFromServer(){
+        AppUtility.getAllPlacesFromServer(this);
     }
 
-    public void setupSwipeTorefesh(){
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+    private void checkAndPullData(){
+        dataPushed++;
+        if(dataPushed==unpushedDataSize){
+            loadDataFromServer();
+        }
+    }
+
+    private void initView(){
+        swipeRefreshLayout = findViewById(R.id.swiperefresh);
+        placeRecyclerView = findViewById(R.id.placeRV);
+    }
+
+    private void setViewData(){
+        setupSwipeTorefesh();
+        setRV();
+    }
+
+    private void setRV(){
+        llm = new LinearLayoutManager(this);
+        allPlaces = AppUtility.getAllPlacesFromMemory();
+        adapter = new PlaceAdapter(this, allPlaces);
+        placeRecyclerView.setLayoutManager(llm);
+        placeRecyclerView.setAdapter(adapter);
+    }
+
+    private void setupSwipeTorefesh(){
+
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(
                 getResources().getColor(android.R.color.holo_blue_bright),
@@ -216,33 +225,5 @@ public class PlaceListActivity extends AppCompatActivity implements ListClickLis
                 getResources().getColor(android.R.color.holo_red_light)
         );
     }
-
-    @Override
-    public void onSuccess(Object object) {
-        checkAndPullData();
-        Log.d("BACKUP", "success");
-    }
-
-    @Override
-    public void onFail(String methodname) {
-        checkAndPullData();
-        Log.d("BACKUP", "failed");
-    }
-
-    private void loadDataFromServer(){
-        AppUtility.getAllPlacesFromServer(this);
-        Log.d("BACKUP", "Loading data from servert");
-    }
-
-
-    private void checkAndPullData(){
-        dataPushed++;
-        Log.d("BACKUP", "in progress "+dataPushed);
-        if(dataPushed==unpushedDataSize){
-            Log.d("BACKUP", "condition satisfied "+dataPushed);
-            loadDataFromServer();
-        }
-    }
-
 
 }
