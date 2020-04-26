@@ -7,6 +7,7 @@
 # Implementations
 You can find following implementation in this project.
 
+ - Google Map
  - SQLite for persistance
  - SQLite3 for creating initial database
  - JSON RPC Server
@@ -18,6 +19,10 @@ You can find following implementation in this project.
  # Features
 You can find following implementation in this project.
 
+ - Distance calculation between two places in places
+ - Setting zoom level on Google Map based on the distance between two places
+ - Get Place Cooordinate on Long press on Google Map
+ - Draq line between two places
  - Create, Update, Delete places on SQLite Database
  - Create, Update, Delete places on Server over JSON RPC Calls
  
