@@ -9,7 +9,7 @@ You can find following implementation in this project.
 
  - SQLite for persistance
  - SQLite3 for creating initial database
- - [JSON RPC][2] Server
+ - JSON RPC Server
  - Swipe to refesh
  - AsyncTask for bacground RPC Call
  - Custom RecyclerView 
