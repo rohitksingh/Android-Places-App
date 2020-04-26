@@ -4,6 +4,8 @@
 # Overview 
 <p align="center"><img width ="800" height="400" src="https://user-images.githubusercontent.com/11274840/80295525-3a03f180-8728-11ea-940d-d2cec26c0bf5.png"></p>
 
+<a href="https://github.com/rohitksingh/IOS-Places"><p align="center">See the IOS counterpart of this app</p></a>
+
 # Implementations
 You can find following implementation in this project.
 
